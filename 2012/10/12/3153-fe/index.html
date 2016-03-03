@@ -1,0 +1,392 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>一个简单的异步上传组件 | Wilee</title>
+
+  <meta name="author" content="xiongwilee">
+  
+  <meta name="description" content="blog">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="一个简单的异步上传组件"/>
+  <meta property="og:site_name" content="Wilee"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Wilee" type="application/atom+xml">
+  <link rel="stylesheet" href="/bootstrap/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="/fontawesome/css/font-awesome.css" type="text/css">
+<link rel="stylesheet" href="/css/style.css" type="text/css">
+  <script src="//apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <!--[if lt IE 9]><script src="/js/html5.js"></script><![endif]-->
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3460af47268846ca3d274b44b6aeb8ce' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+</head>
+
+<body>
+
+  <header id="header" class='normal_mode'>
+    <div id="top">
+  <nav id="nav">
+    <ul class='main-nav-ul'><!-- 
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+       -->
+      <li><a href="/"><i class="fa fa-home"></i></a></li>
+    </ul>
+  </nav>
+  <form id="search" class="search" action="http://www.baidu.com/s" method="get">
+  	<input type="text" class="search_text" placeholder="search" autocomplete="off">
+  	<input type="hidden" class="search_hidden" name="wd">
+  	<button type="submit" class="search_btn fa fa-search"></button>
+  </form>
+</div>
+<script>
+(function($){
+  $('#search .search_btn').click(function(){
+    var formEle = $('#search'),
+      textEle = $("#search .search_text"),
+      hiddenEle = $("#search .search_hidden");
+    hiddenEle.val(textEle.val()+' site:wilee.me');
+    formEle.submit()
+  })
+})(jQuery)
+</script>
+  </header>
+
+
+  <div id="content" class="container" data-0="box-shadow:0px 0px 100px rgba(0,0,0,.5)" data-800="box-shadow:0px 0px 1000px rgba(0,0,0,1)">
+
+    
+<article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title"> 一个简单的异步上传组件</h1>
+  
+
+<div class="collection">
+  <time datetime="2012-10-12T06:50:28.000Z"><i class="fa fa-clock-o"></i><span> 2012-10-12 02:50</span></time>
+  
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/fe-upload/">fe, upload</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <p>工作需要，要写一个简单的文件异步上传功能，首先想到的是jquery的ajaxUpload组件，但是公司用的是tangram，为了这样的一个功能再去引一个jquery实在太亏了;问了一圈同事好像都没有提供这个功能的“库存”，只好自己写了。</p>
+<p>查了一些资料，实现单文件异步提交还是很简单的。大致思路是<strong> 生成一个form表单，target到iframe中去，由后端进行处理，然后再把上传结果信息以html 里的JS全局变量形式返回到iframe，外层实时监听iframe里的JS全局变量即可 </strong>。（看起来像是发起跨域异步请求的方法，但事实上这是不支持跨域的）</p>
+<p>还有一点需要注意的是，<strong> 如果需要修改提交表单的样式，最佳方案是隐藏当前表单 </strong>（这里是指：opacity: 0;或 filter:progid:DXImageTransform.Microsoft.Alpha(opacity:0);），然后在下面加上按钮背景。</p>
+<p>JS代码如下：</p>
+<pre><code>(function($, ns){
+    &quot;use strict&quot;;
+
+    function ajaxUpload(cfg){
+        this.name = cfg.name || &quot;&quot;;
+        this.rendId = cfg.rendId;
+        this.actionUrl = cfg.actionUrl || &apos;/sec/forgot/appeal/upload&apos;;
+        this.method = cfg.method || &quot;post&quot;;
+        this.data = cfg.data;
+        this.status = &apos;0&apos;;//初始状态
+
+        this.onSuccess = cfg.onSuccess || function(){};
+        this.onSending = cfg.onSending || function(){};
+        this.onFailure = cfg.onFailure || function(){};
+
+        var _init = function(me){
+            me.init();
+        }
+        _init(this);
+    }
+
+    ajaxUpload.prototype.init = function(){
+
+        this.render();
+    }
+
+    ajaxUpload.prototype.hiddenTpl = function(){
+        var hiddenTpl = &apos;&apos;;
+        for(var item in this.data){
+            hiddenTpl = hiddenTpl + &apos;&lt;input type=&quot;hidden&quot; name=&quot;&apos;+item+&apos;&quot; value=&quot;&apos;+this.data[item]+&apos;&quot;&gt;&apos;
+        }
+        return hiddenTpl;
+    }
+
+    ajaxUpload.prototype.getTpl = function(){
+        return {
+            wrapper:&apos;&lt;div class=&quot;ajaxUpload&quot;&gt;&apos;,
+            buttonEle:&apos;&lt;div class=&quot;ajaxUpload-show clearfix&quot; &gt;&lt;button class=&quot;ajaxUpload-button&quot;&gt;选择文件&lt;/button&gt;&lt;span class=&quot;ajaxUpload-info&quot;&gt;&lt;/span&gt;&lt;/div&gt;&apos;,
+            form:&apos;&apos;+
+        &apos;&lt;form class=&quot;ajaxupload-form&quot; enctype=&quot;multipart/form-data&quot; target=&quot;ajaxUploadIframe&quot; action=&quot;&apos;+this.actionUrl+&apos;&quot; method=&quot;&apos;+this.method+&apos;&quot;&gt;&apos;+
+            &apos;&lt;input type=&quot;file&quot; name=&quot;&apos;+this.name+&apos;&quot; class=&quot;ajaxupload-form-file&quot;/&gt;&apos;+
+            &apos;&lt;input type=&quot;hidden&quot; name=&quot;picid&quot; class=&quot;ajaxupload-form-picid&quot; value=&quot;&quot;&gt;&apos;+
+            this.hiddenTpl()+
+        &apos;&lt;/form&gt;&apos;,
+            iframe:&apos;&apos;+
+        &apos;&lt;iframe class=&quot;ajaxupload-iframe&quot; name=&quot;ajaxUploadIframe&quot; style=&quot;display:none&quot;&gt;&lt;/iframe&gt;&apos;
+        }
+    }
+
+    ajaxUpload.prototype.render = function(){
+        var tpl = this.getTpl(),
+            ele = {},
+            me = this;
+
+        ele.wrapper = $(tpl.wrapper);
+        ele.formEle = $(tpl.form);
+        ele.buttonEle = $(tpl.buttonEle);
+        ele.iframeEle = $(tpl.iframe);
+
+        $(&apos;#&apos;+this.rendId).append(ele.wrapper);
+        $(ele.wrapper).append(ele.buttonEle);
+        $(ele.wrapper).append(ele.formEle);
+        $(document.body).append(ele.iframeEle);
+
+        ele.fileEle = $(&apos;.ajaxUpload .ajaxupload-form-file&apos;);
+        ele.picidEle = $(&apos;.ajaxUpload .ajaxupload-form-picid&apos;);
+        ele.msgEle = $(&apos;.ajaxUpload .ajaxUpload-info&apos;);
+
+        this.ele = ele;
+
+        $(ele.buttonEle).on(&apos;click&apos;,function(){
+            ele.fileEle.trigger(&apos;click&apos;);
+        })
+        $(ele.fileEle).on(&apos;change&apos;,function(event){
+            var filesData = {};
+            if(event.target.files &amp;&amp; event.target.files[0]){
+                filesData.type = event.target.files[0].type;
+                filesData.name = event.target.files[0].name;
+                filesData.size = event.target.files[0].size;
+            }else if(event.target &amp;&amp; event.target.value){
+                filesData.type = &apos;image/&apos; + event.target.value.substr(event.target.value.lastIndexOf(&apos;.&apos;)+1);
+                filesData.name = event.target.value.substr(event.target.value.lastIndexOf(&apos;\\&apos;)+1);
+                filesData.size;
+            }
+            me.changeFile(filesData,me.renderResult)
+        })
+    };
+    ajaxUpload.prototype.renderResult =function(result,me){
+
+        if(result.errno == &apos;110000&apos;){
+            me.status = &apos;6&apos;;//上传成功
+            me.ele.picidEle.val(result.picid);
+            me.onSuccess(result,me);
+            me.changeMsgView(&apos;done&apos;);
+        }else{
+            me.onFailure(result,me);
+            me.changeMsgView(&apos;fail&apos;);
+
+            me.status = &apos;5&apos;;//上传失败
+            me.ele.msgEle.html(result.msg)
+        }
+    };
+    ajaxUpload.prototype.changeMsgView = function(type){
+        if(type == &apos;sending&apos;){
+            this.ele.msgEle.addClass(&apos;sending&apos;);
+            this.ele.msgEle.removeClass(&apos;done&apos;);
+            this.ele.msgEle.removeClass(&apos;fail&apos;);
+        }else if(type == &apos;done&apos;){
+            this.ele.msgEle.addClass(&apos;done&apos;);
+            this.ele.msgEle.removeClass(&apos;sending&apos;);
+            this.ele.msgEle.removeClass(&apos;fail&apos;);
+        }else if(type == &apos;fail&apos;){
+            this.ele.msgEle.addClass(&apos;fail&apos;);
+            this.ele.msgEle.removeClass(&apos;sending&apos;);
+            this.ele.msgEle.removeClass(&apos;done&apos;);
+        }
+    }
+    ajaxUpload.prototype.changeFile =function(files,callback){
+        var type = files.type.toLowerCase(),
+            size = files.size || &apos;&apos;,
+            name = files.name || &apos;&apos;,
+            allowType = &apos;image/png&apos;+&apos;,&apos;+&apos;image/jpg&apos;+&apos;,&apos;+&apos;image/bmp&apos;+&apos;,&apos;+&apos;image/jpeg&apos;+&apos;,&apos;+&apos;image/gif&apos;,
+            err = {
+                errno:&apos;&apos;,
+                msg:&apos;&apos;
+            },
+            interval,
+            result = &apos;&apos;,
+            me = this;
+
+            this.status = &apos;1&apos;;
+            me.changeMsgView(&apos;sending&apos;);
+            me.ele.msgEle.html(name);
+
+        if(allowType.indexOf(type) == -1){
+            err.msg = &apos;文件格式错误&apos;
+            return callback(err,me);
+        }else if(size &amp;&amp; size&gt;1024000){
+            err.msg = &apos;您上传的图片过大，请上传小于1M的图片吧&apos;
+            return callback(err,me);
+        }else{
+            $(this.ele.formEle).submit();
+            var times = 0;
+            this.onSending &amp;&amp; this.onSending(me);
+
+            interval = setInterval(function(){
+
+                if(times&lt;90){
+                    result = window.frames ? window.frames[&apos;ajaxUploadIframe&apos;].ajaxUpload : me.ele.iframeEle[0].contentDocument ? me.ele.iframeEle[0].contentDocument.ajaxUpload: me.ele.iframeEle[0].contentWindow ? me.ele.iframeEle[0].contentWindow.ajaxUpload:&apos;&apos;;
+                    if(result){
+                        clearInterval(interval);
+                        err.msg = result.msg;
+                        err.errno = result.errno;
+                        err.picid = result.picid;
+                        err.name = name;
+                        me.status = &apos;4&apos;;//上传有结果
+                        return callback(err,me);
+                    }
+                    times++
+                    me.status = &apos;3&apos;;//上传中
+                }else{
+                    me.ele.msgEle.removeClass(&apos;sending&apos;);
+                    me.ele.msgEle.removeClass(&apos;done&apos;);
+
+                    me.status = &apos;2&apos;;//上传超时
+                    clearInterval(interval)
+                    err.msg = &apos;上传超时，请稍后再试！&apos;;
+                    return callback(err,me);
+                }
+            },1000)
+        }
+    };
+
+    ns.define(&apos;module/ajaxUpload&apos;, ajaxUpload);
+})(baidu, window.Pass);
+</code></pre><p>返回上传信息的HTML代码如下：</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&apos;utf-8&apos;/&gt;
+    &lt;script type=&quot;text/javascript&quot; charset=&quot;UTF-8&quot; &gt;
+    var ajaxUpload = {
+        &quot;errno&quot;:&apos;&apos;,
+        &quot;msg&quot;:&apos;&apos;,
+        &quot;picid&quot;:&apos;&apos;
+    }
+    &lt;/script&gt;
+&lt;/head&gt;
+    &lt;body&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="clearfix"></div>
+          <nav id="pagination">
+  
+    <a href="/2012/11/05/3173-javascript/" class="alignleft prev"><i class="fa fa-long-arrow-left"></i>newer</a>
+  
+  
+    <a href="/2012/09/08/3151-wileetest/" class="alignright next">older<i class="fa fa-long-arrow-right"></i></a>
+  
+  <div class="clearfix"></div>
+</nav>
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <!-- <h1 class="title fa fa-comments"></h1> -->
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread" data-thread-key="/2012/10/12/3153-fe/"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+
+
+
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div>
+  
+  &copy; 2016 xiongwilee
+  
+</div>
+Powered by <a href="http://zespia.tw/hexo/" title="Hexo" target="_blank" rel="external">Hexo</a> and <a href="http://pages.github.com/" title="GitHub Pages" target="_blank" rel="external">GitHub Pages</a>
+
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery.imagesloaded.min.js" type="text/javascript"></script>
+<script src="/js/gallery.js" type="text/javascript"></script>
+<script src="/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+
+
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox({
+      'titlePosition': 'inside'
+    });
+  })(jQuery);
+  </script>
+
+
+
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"xiongwilee"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+</body>
+</html>

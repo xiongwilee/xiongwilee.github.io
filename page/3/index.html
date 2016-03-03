@@ -1,0 +1,723 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>page | Wilee</title>
+
+  <meta name="author" content="xiongwilee">
+  
+  <meta name="description" content="blog">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Wilee"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Wilee" type="application/atom+xml">
+  <link rel="stylesheet" href="/bootstrap/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="/fontawesome/css/font-awesome.css" type="text/css">
+<link rel="stylesheet" href="/css/style.css" type="text/css">
+  <script src="//apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <!--[if lt IE 9]><script src="/js/html5.js"></script><![endif]-->
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3460af47268846ca3d274b44b6aeb8ce' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+</head>
+
+<body>
+
+  <header id="header" class='normal_mode'>
+    <div id="top">
+  <nav id="nav">
+    <ul class='main-nav-ul'><!-- 
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+       -->
+      <li><a href="/"><i class="fa fa-home"></i></a></li>
+    </ul>
+  </nav>
+  <form id="search" class="search" action="http://www.baidu.com/s" method="get">
+  	<input type="text" class="search_text" placeholder="search" autocomplete="off">
+  	<input type="hidden" class="search_hidden" name="wd">
+  	<button type="submit" class="search_btn fa fa-search"></button>
+  </form>
+</div>
+<script>
+(function($){
+  $('#search .search_btn').click(function(){
+    var formEle = $('#search'),
+      textEle = $("#search .search_text"),
+      hiddenEle = $("#search .search_hidden");
+    hiddenEle.val(textEle.val()+' site:wilee.me');
+    formEle.submit()
+  })
+})(jQuery)
+</script>
+  </header>
+
+
+  <div id="content" class="container" data-0="box-shadow:0px 0px 100px rgba(0,0,0,.5)" data-800="box-shadow:0px 0px 1000px rgba(0,0,0,1)">
+
+    <div id="cover">
+	<div id="profile" alt="/image/bg_1.jpg">
+		<div href="/" id="title" class="title">
+			<a class="title_link">Wilee<i>ME</i></a>
+		</div>
+
+		
+			<div id="subtitle" class="subtitle">
+				<span class="subtitle_content">知而获智，智达高远</span>
+			</div>
+		
+		<div id="socials" class="socials">
+  <ul class="my-socials">
+    
+    <li>
+    	<a href="https://github.com/xiongwilee" class="github" target="_blank">
+    		<i class="fa fa-github"></i>
+    	</a>
+    </li>
+    
+    <li>
+    	<a href="http://weibo.com/wileexiong" class="weibo" target="_blank">
+    		<i class="fa fa-weibo"></i>
+    	</a>
+    </li>
+    
+    
+    <li>
+     	<a href="mailto:wilee@outlook.com" class="email" target="_blank" title="Email Me">
+    		<i class="fa fa-envelope"></i>
+    	</a>
+    </li>
+    
+  </ul>
+</div>
+	</div>
+	<!--<div id="plane_wrapper" class="plane_wrapper">
+		<img class="plane" src="/image/plane.png" data-0="-webkit-transform:translateX(-200px) translateY(0px) translateZ(0px)" data-1000="-webkit-transform:translateX(1000px) translateY(-100px) translateZ(600px)" />
+	</div>-->
+</div>
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
+      <a href="/2014/01/10/3158-fe/" target="_blank"> 一个渐进变化的小程序</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2014-01-10T07:15:56.000Z"><i class="fa fa-clock-o"></i><span> 2014-01-10 03:15</span></time>
+  
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/fe/">fe</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <p>JS实现一个渐进变化的小程序</p>
+<pre><code>_slide = function(from,to,callback,time){
+    var frequence = 10;
+    var totalTime = time || 200;
+    var changeTimes =  totalTime/frequence;
+    var singleChange =  (to-from)/changeTimes;
+    var interval = setInterval(function(){
+        from = from + singleChange;
+        changeTimes--
+        if(changeTimes&lt;0 || singleChange == 0){
+            clearInterval(interval)
+            callback(to)
+        }else{
+            callback(from)
+        }        
+    },frequence)
+}
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2014/01/10/3158-fe/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2014/01/10/3158-fe/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2014/01/10/3158-fe/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
+      <a href="/2013/10/12/3154-fe/" target="_blank"> Chrome 开发者工具（审查元素）编辑后直接保存CSS或JS到本地</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2013-10-12T07:04:02.000Z"><i class="fa fa-clock-o"></i><span> 2013-10-12 03:04</span></time>
+  
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/fe-chrome/">fe, chrome</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <p>去年@siva海浪高 推荐了一款Chrome插件可以在Chrome开发者工具中编辑CSS或者JS后直接保存到本地，昨天看了下Chrome文档发现Chrome的workspace功能就可以做到这一点，无需使用任何插件，下面是开启步骤（仅需三步，我用的是Chrome 29）：</p>
+<h3 id="1-在-chrome-flags-中启用-Developer-Tools-Experiments-开发者工具实验"><a href="#1-在-chrome-flags-中启用-Developer-Tools-Experiments-开发者工具实验" class="headerlink" title="1.在 chrome://flags/ 中启用 Developer Tools Experiments (开发者工具实验)"></a>1.在 chrome://flags/ 中启用 Developer Tools Experiments (开发者工具实验)</h3><p><img src="http://bcs.duapp.com/wileeimages/blog/1/20130824_200306.jpg" alt="20130824_200306"></p>
+<h3 id="2-这时候你就可以在Chrome-devtool的setting中看到workspace选项，点击add-folder添加需要编辑的本地静态资源目录："><a href="#2-这时候你就可以在Chrome-devtool的setting中看到workspace选项，点击add-folder添加需要编辑的本地静态资源目录：" class="headerlink" title="2.这时候你就可以在Chrome devtool的setting中看到workspace选项，点击add folder添加需要编辑的本地静态资源目录："></a>2.这时候你就可以在Chrome devtool的setting中看到workspace选项，点击add folder添加需要编辑的本地静态资源目录：</h3><p><img src="http://bcs.duapp.com/wileeimages/blog/1/20130824_200438.jpg" alt="20130824_200438"></p>
+<h3 id="3-选择OK后Chrome会再让你确认，点击允许即可"><a href="#3-选择OK后Chrome会再让你确认，点击允许即可" class="headerlink" title="3.选择OK后Chrome会再让你确认，点击允许即可"></a>3.选择OK后Chrome会再让你确认，点击允许即可</h3><p><img src="http://bcs.duapp.com/wileeimages/blog/1/20130824_200428-300x31.jpg" alt="20130824_200428"></p>
+<h3 id="这时候就可以在source-panel看到效果了，并且可以直接进行编辑"><a href="#这时候就可以在source-panel看到效果了，并且可以直接进行编辑" class="headerlink" title="这时候就可以在source panel看到效果了，并且可以直接进行编辑"></a>这时候就可以在source panel看到效果了，并且可以直接进行编辑</h3><p><img src="http://bcs.duapp.com/wileeimages/blog/1/20130824_201316.jpg" alt="20130824_201316"></p>
+<p>BTW ：<strong> 如果还需要在element panel中直接进行微调，或者编辑还需要进行映射 </strong>：</p>
+<p><img src="http://bcs.duapp.com/wileeimages/blog/1/20130824_201609.jpg" alt="20130824_201609"></p>
+<h3 id="这时候即便是在这里编辑，也可以随时保存编辑状态的CSS了"><a href="#这时候即便是在这里编辑，也可以随时保存编辑状态的CSS了" class="headerlink" title="这时候即便是在这里编辑，也可以随时保存编辑状态的CSS了"></a>这时候即便是在这里编辑，也可以随时保存编辑状态的CSS了</h3><p><img src="http://bcs.duapp.com/wileeimages/blog/1/20130824_201656.jpg" alt="20130824_201656"></p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2013/10/12/3154-fe/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2013/10/12/3154-fe/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2013/10/12/3154-fe/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
+      <a href="/2013/10/05/3168-webapp/" target="_blank"> iPad版web页面登录控件用到的几款快捷神器</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2013-10-05T09:24:49.000Z"><i class="fa fa-clock-o"></i><span> 2013-10-05 05:24</span></time>
+  
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/Example/">Example</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <p>先献上DEMO，<a href="http://passport.baidu.com/passApi/html/loginPad_uni.html" target="_blank" rel="external">适配iPad的登录浮层</a> ;</p>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p>如果使用Chrome打开的话其实可以发现他在PC上的体验也是很不错的。可以对比一下<a href="http://www.baidu.com" target="_blank" rel="external">百度首页</a>未登录状态下右上角的登录按钮弹出来的体验几乎一模一样。</p>
+<p>开发iPad的登录控件遇到最大的问题是：<strong> 目前PC端已经有一套登录控件，现在要开发的版本必须和当前PC的基本体验保持一致，在不改动当前的基础库的情况下如何保证最优的代码复用，最低的维护成本，最可靠的性能 </strong></p>
+<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>基于iPad端web页面的登录浮层应用场景相对于PC来说相对简单一些。但是对比一下PC端的登录控件的功能，真心没有想象钟的那么简单。涉及到的功能主要包括：</p>
+<ul>
+<li>1.主登录功能</li>
+<li>2.短信登录功能</li>
+<li>3.第三方帐号登录功能</li>
+<li>4.交互细节</li>
+<li>5.实例化时的配置细节</li>
+</ul>
+<p>再对比下开发该应用的场景：</p>
+<ul>
+<li>1.最快效率开发出最优性能</li>
+<li>2.优化代码复用情况，最好不要出现，如果某处登录逻辑修改就需要修改两处代码的情况</li>
+<li>3.尽可能满足现有功能，对性能不做特别要求</li>
+</ul>
+<p>就这三条其实就可以知道要怎么做了：<strong> 在现有的PC端上做体验的优化 </strong></p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>优秀的工程离不开便捷的工具和技术，例如：fastclick,iconfont，CSS3的box模型、animate等等。</p>
+<h3 id="神器一：fastclick"><a href="#神器一：fastclick" class="headerlink" title="神器一：fastclick"></a>神器一：fastclick</h3><p>关于FastClick已经有很多内容可以参考了，奉上GIT地址：<a href="https://github.com/ftlabs/fastclick" target="_blank" rel="external">https://github.com/ftlabs/fastclick</a>;它解决了touch设备上300ms等待是否为dbclick的延迟。</p>
+<h3 id="神器二：iconfont"><a href="#神器二：iconfont" class="headerlink" title="神器二：iconfont"></a>神器二：iconfont</h3><p>retina图标并不是把图片放大为现在的两倍就能解决问题了的，一些单色图标可以使用字体来完美解决；一淘大牛们做的开源工具<a href="http://www.iconfont.cn/" target="_blank" rel="external">http://www.iconfont.cn/</a>。</p>
+<p>这个的平台可以定制也可以按项目聚类，缺点是如果有UE妹纸的ICON加进来就要先把UE图里的矢量图标转成SVG然后再上传，比用PS直接处理2倍大小的图片相对麻烦些。</p>
+<h3 id="神器三：beforeorientationchange"><a href="#神器三：beforeorientationchange" class="headerlink" title="神器三：beforeorientationchange"></a>神器三：beforeorientationchange</h3><p>在iPad下无法转屏需要500ms的时间，但是标准提供的orientationchange方法只在转屏之后执行；可能有一些动作需要在转屏之前完成，这里通过重力感应获取当前状态实现的beforeorientationchange事件,<a href="https://github.com/webzhangnan/jquery.beforeorientationchange" target="_blank" rel="external">https://github.com/webzhangnan/jquery.beforeorientationchange</a>，可以感受一下。</p>
+<h3 id="神器四：animate-css"><a href="#神器四：animate-css" class="headerlink" title="神器四：animate.css"></a>神器四：animate.css</h3><p>这款通过CSS3的animation属性实现的一套动画组件；当然在iPad版本登录中只用到了三套动画，所以就没有整体引入。而是在代码里做了一套简单的封装。这里又一个比较靠谱的方法：</p>
+<p>首先定义一套动画，例如：</p>
+<pre><code>@keyframes loginPad_shakeSlideIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(-2000px);
+        -moz-transform: translateY(-2000px);
+        -o-transform: translateY(-2000px);
+        -ms-transform: translateY(-2000px);
+        transform: translateY(-2000px)
+    }
+
+    80% {
+        opacity: .8;
+        -webkit-transform: translateY(10px);
+        -moz-transform: translateY(10px);
+        -o-transform: translateY(10px);
+        -ms-transform: translateY(10px);
+        transform: translateY(10px)
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0px);
+        -moz-transform: translateY(0px);
+        -o-transform: translateY(0px);
+        -ms-transform: translateY(0px);
+        transform: translateY(0px)
+    }
+}
+</code></pre><p>然后就可以通过setTimeout的方法实现动态加载动画:</p>
+<pre><code>var animateActor = function(ele,actor){
+    var $ele = $(ele),
+        animate = {
+        shakeSlideIn:&quot;loginPad_slideInDown .5s linear 0 1 normal forwards&quot;
+    }
+    $ele.css(&quot;-webkit-animation&quot;, &quot;&quot;);
+    setTimeout(function() {
+        $ele.css(&quot;-webkit-animation&quot;, $ele[actor])
+    }, 0);
+
+    return $ele;
+}
+</code></pre><p>这样做的好处是无论初始状态是什么情况都可以加载动画，而不是通过addClass和removeClass的方式，还可以写出很漂亮的链式表达式：</p>
+<pre><code>animateActor($(&apos;#test&apos;),&apos;slideInDown&apos;).css({&apos;opacity&apos;:&apos;0&apos;})
+</code></pre><p>如果在类里再做封装就更好看了。</p>
+<p>有了这些工具开发起来便捷很多。</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2013/10/05/3168-webapp/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2013/10/05/3168-webapp/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2013/10/05/3168-webapp/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
+      <a href="/2013/09/12/hello-git/" target="_blank"> GIT入门</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2013-09-12T02:24:28.000Z"><i class="fa fa-clock-o"></i><span> 2013-09-12 10:24</span></time>
+  
+  
+  <div class="categories">
+  	<i class="fa fa-folder-open"></i>
+    <a href="/categories/技术/">技术</a>
+  </div>
+
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/GIT-Github/">GIT,Github</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <p>git和svn不同的地方有一个索引的概念，需要把修改点提交到索引，之后在提交索引到仓库。</p>
+<p>###github使用好文章推荐</p>
+<ul>
+<li>git入门: <a href="http://rogerdudler.github.io/git-guide/index.zh.html" target="_blank" rel="external">http://rogerdudler.github.io/git-guide/index.zh.html</a></li>
+<li>git详细:<a href="http://www.cnblogs.com/zhangjing230/archive/2012/05/09/2489745.html#gitdefintion" target="_blank" rel="external">http://www.cnblogs.com/zhangjing230/archive/2012/05/09/2489745.html#gitdefintion</a> </li>
+<li>git总结<a href="http://webzhangnan.github.io/2014/03/28/git-%E5%85%A5%E9%97%A8/" target="_blank" rel="external">http://webzhangnan.github.io/2014/03/28/git-%E5%85%A5%E9%97%A8/</a></li>
+<li>first:<a href="http://www.csser.com/board/4f53875c55bdcb545c000d05" target="_blank" rel="external">http://www.csser.com/board/4f53875c55bdcb545c000d05</a></li>
+<li>second: <a href="http://my.oschina.net/meilihao/blog/157716" target="_blank" rel="external">http://my.oschina.net/meilihao/blog/157716</a></li>
+<li>jekyll git page:<a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html" target="_blank" rel="external">搭建一个免费的，无限流量的Blog—-github Pages和Jekyll入门</a> </li>
+<li>中文介绍jeykyll详细:<a href="http://jekyllcn.com/" target="_blank" rel="external">http://jekyllcn.com/</a></li>
+<li>jekyll模板:<a href="https://github.com/jekyll/jekyll/wiki/Sites" target="_blank" rel="external">https://github.com/jekyll/jekyll/wiki/Sites</a></li>
+<li>jekyll详细1:<a href="http://blog.csdn.net/on_1y/article/details/19259435" target="_blank" rel="external">http://blog.csdn.net/on_1y/article/details/19259435</a></li>
+<li>jekyll详细2:<a href="http://higrid.net/c-art-jeklly_template_data.htm" target="_blank" rel="external">http://higrid.net/c-art-jeklly_template_data.htm</a></li>
+</ul>
+<p>###github合作思路</p>
+<ul>
+<li>相关文章<a href="http://qbaty.iteye.com/blog/865368" target="_blank" rel="external">http://qbaty.iteye.com/blog/865368</a>、<a href="http://joshuasabrina.iteye.com/blog/1816597" target="_blank" rel="external">http://joshuasabrina.iteye.com/blog/1816597</a>、<a href="http://xiaocong.github.io/blog/2013/03/20/team-collaboration-with-github/" target="_blank" rel="external">http://xiaocong.github.io/blog/2013/03/20/team-collaboration-with-github/</a></li>
+</ul>
+<p>###必要的命令</p>
+<p>1、语句设置默认。</p>
+<pre><code>git config --global user.name &apos;conan&apos;    
+</code></pre><p>等语句设置默认。 2、建立仓库。</p>
+<pre><code>git init    
+</code></pre><p> 3、添加修改到索引</p>
+<pre><code>git add .    
+</code></pre><p>conan</p>
+<p> 4、提交索引中的修改到仓库</p>
+<pre><code>git commit -m &quot;update&quot;    
+</code></pre><p>5、在加一个-a参数就可以既将修改的内容添加到索引（新增文件时不可以），又提交</p>
+<pre><code>git commit commit -am &quot;add inde and commit&quot;    
+</code></pre><p>6、检查还未提交到索引的修改</p>
+<pre><code>git diff    
+</code></pre><p>7、显示以往提交的记录</p>
+<pre><code>git log --all    
+</code></pre><p>8、显示当前的修改状态，提示修改了什么，或者增加了什么</p>
+<pre><code>git status    
+</code></pre><p>9、修改上一次commit(提交)的解释文本，下面操作是先提交，然后修改解释文本，然后查看log日志</p>
+<pre><code>git commit -m &quot;ready change&quot;
+git commit --amend -m &quot;change commit text&quot;
+git log
+</code></pre><p>10、删除一个文件时，无法通过命令“git add .”来添加索引（<a href="http://js250.com" target="_blank" rel="external">柯楠</a>认为十分周全的考虑，避免意外删除）， 可以通过一下2种方式提交</p>
+<pre><code>git add -A . &amp;&amp; git commit -m &quot;delete file&quot;    
+
+git commit -am &quot;delte file&quot;    
+</code></pre><p>11、克隆本地仓库到一个远端仓库</p>
+<pre><code>git clone --bare . ../remote-repository.git     
+</code></pre><p>12、将修改的内容推送到远端仓库（先提交，再推送）</p>
+<pre><code>git commmit -am &quot;read push remote&quot;
+git push ../remote-repository.git
+</code></pre><p>13、查看帮助</p>
+<pre><code>git init -help
+git  add -help     
+</code></pre><p>14、为远程仓库地址添加一个短名称（默认克隆源头的仓库短名称是”origin”）</p>
+<pre><code>#设置短名称
+git remote add shortname ../remote-repository.git
+</code></pre><p>修改内容</p>
+<p>echo ‘change’ test01</p>
+<p>提交</p>
+<pre><code>git commit -am &quot;update of short name&quot;
+</code></pre><p>使用短名称推送</p>
+<pre><code>git push shortname
+</code></pre><p>15、显示已经有的远端仓库</p>
+<pre><code>git remote     
+</code></pre><p>15、克隆一个远端仓库</p>
+<pre><code>git clone https://github.com/webzhangnan/rocket_apps.git    
+</code></pre><p>16、拉取远端仓库的修改</p>
+<pre><code>git pull https://github.com/webzhangnan/rocket_apps.git    
+</code></pre><p>上面的操作将会自动拉取并合并远程(<a href="https://github.com/webzhangnan/rocket_apps.git的master分支)和本地的分支。" target="_blank" rel="external">https://github.com/webzhangnan/rocket_apps.git的master分支)和本地的分支。</a></p>
+<p>可以分开操作先拉取</p>
+<pre><code>git fetch https://github.com/webzhangnan/rocket_apps.git    
+</code></pre><p>然后合并</p>
+<pre><code>git merge https://github.com/webzhangnan/rocket_apps.git     
+</code></pre><p>操作。</p>
+<p>17、删除新建的还未提交的文件</p>
+<pre><code>git clean -f    
+</code></pre><p>18、还原到老版本 首先显示所有的提交log日志</p>
+<pre><code>git log --all    
+</code></pre><p>然后checkout对应的commit_name就是commit后面那串字符</p>
+<pre><code>git checkout commit_name    
+</code></pre><p>或者使用（这种会浏览版本记录）</p>
+<pre><code>git revert commit_name    
+</code></pre><p>19、标记功能</p>
+<pre><code>git tag version1.6 -m &apos;version 1.6&apos;      
+</code></pre><p>20、查看所有分支</p>
+<pre><code>git branch -a    
+</code></pre><p>21、创建分支</p>
+<pre><code>git branch newbranch    
+</code></pre><p>22、删除分支</p>
+<pre><code>git branch -d newbranch    
+</code></pre><p>23、合并分支</p>
+<pre><code>git merge newbranch    
+</code></pre><p>或者使用合并工具</p>
+<pre><code>git mergetool     
+</code></pre><p>24、合并多个commit</p>
+<pre><code>git rebase -i HEAD~7    
+</code></pre><p>25、创建补丁</p>
+<pre><code># Create a new branch
+git branch mybranch
+</code></pre><p>未完待续…</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2013/09/12/hello-git/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2013/09/12/hello-git/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2013/09/12/hello-git/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
+      <a href="/2013/09/10/3149-2-steps-to-get-node-blog-running/" target="_blank"> 正义感从何而来？</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2013-09-10T02:24:28.000Z"><i class="fa fa-clock-o"></i><span> 2013-09-10 10:24</span></time>
+  
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/life-正义感/">life, 正义感</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <p>得大学的时候选了一门选修课，可是课上老师授课内容频频出错，两周后实在听不下去，就从此再也没有去上这门选修。甚至这个老师也被列在了自己大学回忆的黑名单里，之后跟其他同学聊到这个老师，有人说，这个老师很好。但是但是在那时自己看来，授课内容严谨准确（广义上），是老师教学的底线，一旦破了这个底线，老师人再好，也是有问题的。再后来发现，这老师人确实不错，尽管翘掉了后面所有的课程，那门课还是很奇迹般的通过了。<br>
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2013/09/10/3149-2-steps-to-get-node-blog-running/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2013/09/10/3149-2-steps-to-get-node-blog-running/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2013/09/10/3149-2-steps-to-get-node-blog-running/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+<nav id="pagination">
+  
+    <a href="/page/2/" class="alignleft prev"><i class="fa fa-long-arrow-left"></i>prev</a>
+  
+  
+    <a href="/page/4/" class="alignright next">next<i class="fa fa-long-arrow-right"></i></a>
+  
+  <div class="clearfix"></div>
+</nav>
+
+<script src="/js/jquery.anystretch.min.js" type="text/javascript"></script>
+<script src="/js/cover.js" type="text/javascript"></script>
+<script src="/js/skrollr.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+	if(window.ontouchstart === undefined){
+		//视差滚动仅仅用在PC端
+		setTimeout(function(){
+			$('#profile').attr({"data-0":"top:0px;opacity:1;","data-1000":"top:500px;opacity:.2;"});//logo
+			$('#socials').attr({"data-0":"margin-top:80px;","data-1000":"margin-top:-30px;"});//社交logo
+			$('.anystretch img').attr({'data-0':'margin-top:0px','data-1000':'margin-top:150px','data-1001':'margin-top:0px'});//大bnner
+			var Skrollr = skrollr.init();//视差滚动
+		},300)
+	}
+</script>
+
+
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div>
+  
+  &copy; 2016 xiongwilee
+  
+</div>
+Powered by <a href="http://zespia.tw/hexo/" title="Hexo" target="_blank" rel="external">Hexo</a> and <a href="http://pages.github.com/" title="GitHub Pages" target="_blank" rel="external">GitHub Pages</a>
+
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery.imagesloaded.min.js" type="text/javascript"></script>
+<script src="/js/gallery.js" type="text/javascript"></script>
+<script src="/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+
+
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox({
+      'titlePosition': 'inside'
+    });
+  })(jQuery);
+  </script>
+
+
+
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"xiongwilee"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+</body>
+</html>

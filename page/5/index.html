@@ -1,0 +1,976 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>page | Wilee</title>
+
+  <meta name="author" content="xiongwilee">
+  
+  <meta name="description" content="blog">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Wilee"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Wilee" type="application/atom+xml">
+  <link rel="stylesheet" href="/bootstrap/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="/fontawesome/css/font-awesome.css" type="text/css">
+<link rel="stylesheet" href="/css/style.css" type="text/css">
+  <script src="//apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <!--[if lt IE 9]><script src="/js/html5.js"></script><![endif]-->
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3460af47268846ca3d274b44b6aeb8ce' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+</head>
+
+<body>
+
+  <header id="header" class='normal_mode'>
+    <div id="top">
+  <nav id="nav">
+    <ul class='main-nav-ul'><!-- 
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+       -->
+      <li><a href="/"><i class="fa fa-home"></i></a></li>
+    </ul>
+  </nav>
+  <form id="search" class="search" action="http://www.baidu.com/s" method="get">
+  	<input type="text" class="search_text" placeholder="search" autocomplete="off">
+  	<input type="hidden" class="search_hidden" name="wd">
+  	<button type="submit" class="search_btn fa fa-search"></button>
+  </form>
+</div>
+<script>
+(function($){
+  $('#search .search_btn').click(function(){
+    var formEle = $('#search'),
+      textEle = $("#search .search_text"),
+      hiddenEle = $("#search .search_hidden");
+    hiddenEle.val(textEle.val()+' site:wilee.me');
+    formEle.submit()
+  })
+})(jQuery)
+</script>
+  </header>
+
+
+  <div id="content" class="container" data-0="box-shadow:0px 0px 100px rgba(0,0,0,.5)" data-800="box-shadow:0px 0px 1000px rgba(0,0,0,1)">
+
+    <div id="cover">
+	<div id="profile" alt="/image/bg_1.jpg">
+		<div href="/" id="title" class="title">
+			<a class="title_link">Wilee<i>ME</i></a>
+		</div>
+
+		
+			<div id="subtitle" class="subtitle">
+				<span class="subtitle_content">知而获智，智达高远</span>
+			</div>
+		
+		<div id="socials" class="socials">
+  <ul class="my-socials">
+    
+    <li>
+    	<a href="https://github.com/xiongwilee" class="github" target="_blank">
+    		<i class="fa fa-github"></i>
+    	</a>
+    </li>
+    
+    <li>
+    	<a href="http://weibo.com/wileexiong" class="weibo" target="_blank">
+    		<i class="fa fa-weibo"></i>
+    	</a>
+    </li>
+    
+    
+    <li>
+     	<a href="mailto:wilee@outlook.com" class="email" target="_blank" title="Email Me">
+    		<i class="fa fa-envelope"></i>
+    	</a>
+    </li>
+    
+  </ul>
+</div>
+	</div>
+	<!--<div id="plane_wrapper" class="plane_wrapper">
+		<img class="plane" src="/image/plane.png" data-0="-webkit-transform:translateX(-200px) translateY(0px) translateZ(0px)" data-1000="-webkit-transform:translateX(1000px) translateY(-100px) translateZ(600px)" />
+	</div>-->
+</div>
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
+      <a href="/2012/11/05/3173-javascript/" target="_blank"> javascript中element等于string的坑</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2012-11-05T11:14:16.000Z"><i class="fa fa-clock-o"></i><span> 2012-11-05 07:14</span></time>
+  
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/Example/">Example</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <p>JS编码中有一个方法的形参需要判断类型：</p>
+<pre><code>var test = function(ele){
+    if((typeof ele).toLowerCase() == &apos;string&apos; || ele==&apos;&apos;){
+        //do something here
+    }else{
+    }
+}
+</code></pre><p>正常情况下在传递一个element作为形参去执行这个方法程序应该走到else的分支中去；但是断点发现，一个<a href="" id="test"></a>的节点作为形参却走到了if中的代码，断电发现：</p>
+<pre><code>ele==&apos;&apos;
+</code></pre><p>竟然为true , console打出来的参数确实是一个element，typeof出来也是object。经大神提示：</p>
+<pre><code>var a = document.createElement(&apos;div&apos;);
+a.toString = function(){
+    return &apos;test&apos;
+};
+a==&apos;test&apos;//true
+</code></pre><p>但是，这个<a href="" id="test"></a>并没有重写toString方法。为何会toString会返回””呢。</p>
+<pre><code>var b = document.createElement(&apos;a&apos;);
+b.href=&apos;http://www.baidu.com&apos;;
+b.toString() == &apos;http://www.baidu.com/&apos;;//true
+</code></pre><p>这下全都明白了。</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2012/11/05/3173-javascript/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2012/11/05/3173-javascript/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2012/11/05/3173-javascript/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
+      <a href="/2012/10/12/3153-fe/" target="_blank"> 一个简单的异步上传组件</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2012-10-12T06:50:28.000Z"><i class="fa fa-clock-o"></i><span> 2012-10-12 02:50</span></time>
+  
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/fe-upload/">fe, upload</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <p>工作需要，要写一个简单的文件异步上传功能，首先想到的是jquery的ajaxUpload组件，但是公司用的是tangram，为了这样的一个功能再去引一个jquery实在太亏了;问了一圈同事好像都没有提供这个功能的“库存”，只好自己写了。</p>
+<p>查了一些资料，实现单文件异步提交还是很简单的。大致思路是<strong> 生成一个form表单，target到iframe中去，由后端进行处理，然后再把上传结果信息以html 里的JS全局变量形式返回到iframe，外层实时监听iframe里的JS全局变量即可 </strong>。（看起来像是发起跨域异步请求的方法，但事实上这是不支持跨域的）</p>
+<p>还有一点需要注意的是，<strong> 如果需要修改提交表单的样式，最佳方案是隐藏当前表单 </strong>（这里是指：opacity: 0;或 filter:progid:DXImageTransform.Microsoft.Alpha(opacity:0);），然后在下面加上按钮背景。</p>
+<p>JS代码如下：</p>
+<pre><code>(function($, ns){
+    &quot;use strict&quot;;
+
+    function ajaxUpload(cfg){
+        this.name = cfg.name || &quot;&quot;;
+        this.rendId = cfg.rendId;
+        this.actionUrl = cfg.actionUrl || &apos;/sec/forgot/appeal/upload&apos;;
+        this.method = cfg.method || &quot;post&quot;;
+        this.data = cfg.data;
+        this.status = &apos;0&apos;;//初始状态
+
+        this.onSuccess = cfg.onSuccess || function(){};
+        this.onSending = cfg.onSending || function(){};
+        this.onFailure = cfg.onFailure || function(){};
+
+        var _init = function(me){
+            me.init();
+        }
+        _init(this);
+    }
+
+    ajaxUpload.prototype.init = function(){
+
+        this.render();
+    }
+
+    ajaxUpload.prototype.hiddenTpl = function(){
+        var hiddenTpl = &apos;&apos;;
+        for(var item in this.data){
+            hiddenTpl = hiddenTpl + &apos;&lt;input type=&quot;hidden&quot; name=&quot;&apos;+item+&apos;&quot; value=&quot;&apos;+this.data[item]+&apos;&quot;&gt;&apos;
+        }
+        return hiddenTpl;
+    }
+
+    ajaxUpload.prototype.getTpl = function(){
+        return {
+            wrapper:&apos;&lt;div class=&quot;ajaxUpload&quot;&gt;&apos;,
+            buttonEle:&apos;&lt;div class=&quot;ajaxUpload-show clearfix&quot; &gt;&lt;button class=&quot;ajaxUpload-button&quot;&gt;选择文件&lt;/button&gt;&lt;span class=&quot;ajaxUpload-info&quot;&gt;&lt;/span&gt;&lt;/div&gt;&apos;,
+            form:&apos;&apos;+
+        &apos;&lt;form class=&quot;ajaxupload-form&quot; enctype=&quot;multipart/form-data&quot; target=&quot;ajaxUploadIframe&quot; action=&quot;&apos;+this.actionUrl+&apos;&quot; method=&quot;&apos;+this.method+&apos;&quot;&gt;&apos;+
+            &apos;&lt;input type=&quot;file&quot; name=&quot;&apos;+this.name+&apos;&quot; class=&quot;ajaxupload-form-file&quot;/&gt;&apos;+
+            &apos;&lt;input type=&quot;hidden&quot; name=&quot;picid&quot; class=&quot;ajaxupload-form-picid&quot; value=&quot;&quot;&gt;&apos;+
+            this.hiddenTpl()+
+        &apos;&lt;/form&gt;&apos;,
+            iframe:&apos;&apos;+
+        &apos;&lt;iframe class=&quot;ajaxupload-iframe&quot; name=&quot;ajaxUploadIframe&quot; style=&quot;display:none&quot;&gt;&lt;/iframe&gt;&apos;
+        }
+    }
+
+    ajaxUpload.prototype.render = function(){
+        var tpl = this.getTpl(),
+            ele = {},
+            me = this;
+
+        ele.wrapper = $(tpl.wrapper);
+        ele.formEle = $(tpl.form);
+        ele.buttonEle = $(tpl.buttonEle);
+        ele.iframeEle = $(tpl.iframe);
+
+        $(&apos;#&apos;+this.rendId).append(ele.wrapper);
+        $(ele.wrapper).append(ele.buttonEle);
+        $(ele.wrapper).append(ele.formEle);
+        $(document.body).append(ele.iframeEle);
+
+        ele.fileEle = $(&apos;.ajaxUpload .ajaxupload-form-file&apos;);
+        ele.picidEle = $(&apos;.ajaxUpload .ajaxupload-form-picid&apos;);
+        ele.msgEle = $(&apos;.ajaxUpload .ajaxUpload-info&apos;);
+
+        this.ele = ele;
+
+        $(ele.buttonEle).on(&apos;click&apos;,function(){
+            ele.fileEle.trigger(&apos;click&apos;);
+        })
+        $(ele.fileEle).on(&apos;change&apos;,function(event){
+            var filesData = {};
+            if(event.target.files &amp;&amp; event.target.files[0]){
+                filesData.type = event.target.files[0].type;
+                filesData.name = event.target.files[0].name;
+                filesData.size = event.target.files[0].size;
+            }else if(event.target &amp;&amp; event.target.value){
+                filesData.type = &apos;image/&apos; + event.target.value.substr(event.target.value.lastIndexOf(&apos;.&apos;)+1);
+                filesData.name = event.target.value.substr(event.target.value.lastIndexOf(&apos;\\&apos;)+1);
+                filesData.size;
+            }
+            me.changeFile(filesData,me.renderResult)
+        })
+    };
+    ajaxUpload.prototype.renderResult =function(result,me){
+
+        if(result.errno == &apos;110000&apos;){
+            me.status = &apos;6&apos;;//上传成功
+            me.ele.picidEle.val(result.picid);
+            me.onSuccess(result,me);
+            me.changeMsgView(&apos;done&apos;);
+        }else{
+            me.onFailure(result,me);
+            me.changeMsgView(&apos;fail&apos;);
+
+            me.status = &apos;5&apos;;//上传失败
+            me.ele.msgEle.html(result.msg)
+        }
+    };
+    ajaxUpload.prototype.changeMsgView = function(type){
+        if(type == &apos;sending&apos;){
+            this.ele.msgEle.addClass(&apos;sending&apos;);
+            this.ele.msgEle.removeClass(&apos;done&apos;);
+            this.ele.msgEle.removeClass(&apos;fail&apos;);
+        }else if(type == &apos;done&apos;){
+            this.ele.msgEle.addClass(&apos;done&apos;);
+            this.ele.msgEle.removeClass(&apos;sending&apos;);
+            this.ele.msgEle.removeClass(&apos;fail&apos;);
+        }else if(type == &apos;fail&apos;){
+            this.ele.msgEle.addClass(&apos;fail&apos;);
+            this.ele.msgEle.removeClass(&apos;sending&apos;);
+            this.ele.msgEle.removeClass(&apos;done&apos;);
+        }
+    }
+    ajaxUpload.prototype.changeFile =function(files,callback){
+        var type = files.type.toLowerCase(),
+            size = files.size || &apos;&apos;,
+            name = files.name || &apos;&apos;,
+            allowType = &apos;image/png&apos;+&apos;,&apos;+&apos;image/jpg&apos;+&apos;,&apos;+&apos;image/bmp&apos;+&apos;,&apos;+&apos;image/jpeg&apos;+&apos;,&apos;+&apos;image/gif&apos;,
+            err = {
+                errno:&apos;&apos;,
+                msg:&apos;&apos;
+            },
+            interval,
+            result = &apos;&apos;,
+            me = this;
+
+            this.status = &apos;1&apos;;
+            me.changeMsgView(&apos;sending&apos;);
+            me.ele.msgEle.html(name);
+
+        if(allowType.indexOf(type) == -1){
+            err.msg = &apos;文件格式错误&apos;
+            return callback(err,me);
+        }else if(size &amp;&amp; size&gt;1024000){
+            err.msg = &apos;您上传的图片过大，请上传小于1M的图片吧&apos;
+            return callback(err,me);
+        }else{
+            $(this.ele.formEle).submit();
+            var times = 0;
+            this.onSending &amp;&amp; this.onSending(me);
+
+            interval = setInterval(function(){
+
+                if(times&lt;90){
+                    result = window.frames ? window.frames[&apos;ajaxUploadIframe&apos;].ajaxUpload : me.ele.iframeEle[0].contentDocument ? me.ele.iframeEle[0].contentDocument.ajaxUpload: me.ele.iframeEle[0].contentWindow ? me.ele.iframeEle[0].contentWindow.ajaxUpload:&apos;&apos;;
+                    if(result){
+                        clearInterval(interval);
+                        err.msg = result.msg;
+                        err.errno = result.errno;
+                        err.picid = result.picid;
+                        err.name = name;
+                        me.status = &apos;4&apos;;//上传有结果
+                        return callback(err,me);
+                    }
+                    times++
+                    me.status = &apos;3&apos;;//上传中
+                }else{
+                    me.ele.msgEle.removeClass(&apos;sending&apos;);
+                    me.ele.msgEle.removeClass(&apos;done&apos;);
+
+                    me.status = &apos;2&apos;;//上传超时
+                    clearInterval(interval)
+                    err.msg = &apos;上传超时，请稍后再试！&apos;;
+                    return callback(err,me);
+                }
+            },1000)
+        }
+    };
+
+    ns.define(&apos;module/ajaxUpload&apos;, ajaxUpload);
+})(baidu, window.Pass);
+</code></pre><p>返回上传信息的HTML代码如下：</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&apos;utf-8&apos;/&gt;
+    &lt;script type=&quot;text/javascript&quot; charset=&quot;UTF-8&quot; &gt;
+    var ajaxUpload = {
+        &quot;errno&quot;:&apos;&apos;,
+        &quot;msg&quot;:&apos;&apos;,
+        &quot;picid&quot;:&apos;&apos;
+    }
+    &lt;/script&gt;
+&lt;/head&gt;
+    &lt;body&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2012/10/12/3153-fe/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2012/10/12/3153-fe/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2012/10/12/3153-fe/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
+      <a href="/2012/09/08/3151-wileetest/" target="_blank"> WEB标准列表</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2012-09-08T02:24:28.000Z"><i class="fa fa-clock-o"></i><span> 2012-09-08 10:24</span></time>
+  
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/fe-web/">fe, web</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <h2 id="WEB标准列表-，-来自-https-gist-github-com-wintercn-5925837"><a href="#WEB标准列表-，-来自-https-gist-github-com-wintercn-5925837" class="headerlink" title="WEB标准列表 ， 来自 https://gist.github.com/wintercn/5925837"></a>WEB标准列表 ， 来自 <a href="https://gist.github.com/wintercn/5925837" target="_blank" rel="external">https://gist.github.com/wintercn/5925837</a></h2><h3 id="HTML5-markup"><a href="#HTML5-markup" class="headerlink" title="HTML5   markup "></a>HTML5  <strong> markup </strong></h3><p><a href="http://www.w3.org/TR/html5/single-page.html" target="_blank" rel="external">http://www.w3.org/TR/html5/single-page.html</a></p>
+<hr>
+<h3 id="HTML-5-1-markup"><a href="#HTML-5-1-markup" class="headerlink" title="HTML 5.1   markup "></a>HTML 5.1  <strong> markup </strong></h3><p><a href="http://www.w3.org/TR/html51/single-page.html" target="_blank" rel="external">http://www.w3.org/TR/html51/single-page.html</a></p>
+<hr>
+<h3 id="CSS-Style-Attributes-markup"><a href="#CSS-Style-Attributes-markup" class="headerlink" title="CSS Style Attributes   markup "></a>CSS Style Attributes  <strong> markup </strong></h3><p><a href="http://www.w3.org/TR/css-style-attr/" target="_blank" rel="external">http://www.w3.org/TR/css-style-attr/</a></p>
+<hr>
+<h3 id="HTML-Templates-markup"><a href="#HTML-Templates-markup" class="headerlink" title="HTML Templates   markup "></a>HTML Templates  <strong> markup </strong></h3><p><a href="http://www.w3.org/TR/html-templates/" target="_blank" rel="external">http://www.w3.org/TR/html-templates/</a></p>
+<hr>
+<h3 id="Scalable-Vector-Graphics-SVG-1-1-markup"><a href="#Scalable-Vector-Graphics-SVG-1-1-markup" class="headerlink" title="Scalable Vector Graphics (SVG) 1.1   markup "></a>Scalable Vector Graphics (SVG) 1.1  <strong> markup </strong></h3><p><a href="http://www.w3.org/TR/SVG/single-page.html" target="_blank" rel="external">http://www.w3.org/TR/SVG/single-page.html</a></p>
+<hr>
+<h3 id="Mathematical-Markup-Language-MathML-Version-3-0-markup"><a href="#Mathematical-Markup-Language-MathML-Version-3-0-markup" class="headerlink" title="Mathematical Markup Language (MathML) Version 3.0   markup "></a>Mathematical Markup Language (MathML) Version 3.0  <strong> markup </strong></h3><p><a href="http://www.w3.org/TR/MathML/" target="_blank" rel="external">http://www.w3.org/TR/MathML/</a></p>
+<hr>
+<h3 id="WebIDL-api"><a href="#WebIDL-api" class="headerlink" title="WebIDL   api "></a>WebIDL  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/WebIDL/" target="_blank" rel="external">http://www.w3.org/TR/WebIDL/</a></p>
+<hr>
+<h3 id="Web-Workers-api"><a href="#Web-Workers-api" class="headerlink" title="Web Workers   api "></a>Web Workers  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/workers/" target="_blank" rel="external">http://www.w3.org/TR/workers/</a></p>
+<hr>
+<h3 id="Server-Sent-Events-api"><a href="#Server-Sent-Events-api" class="headerlink" title="Server-Sent Events   api "></a>Server-Sent Events  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/eventsource/" target="_blank" rel="external">http://www.w3.org/TR/eventsource/</a></p>
+<hr>
+<h3 id="The-WebSocket-API-api"><a href="#The-WebSocket-API-api" class="headerlink" title="The WebSocket API   api "></a>The WebSocket API  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/websockets/" target="_blank" rel="external">http://www.w3.org/TR/websockets/</a></p>
+<hr>
+<h3 id="HTML5-Web-Messaging-api"><a href="#HTML5-Web-Messaging-api" class="headerlink" title="HTML5 Web Messaging   api "></a>HTML5 Web Messaging  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/webmessaging/" target="_blank" rel="external">http://www.w3.org/TR/webmessaging/</a></p>
+<hr>
+<h3 id="DOM4-api"><a href="#DOM4-api" class="headerlink" title="DOM4   api "></a>DOM4  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/dom/" target="_blank" rel="external">http://www.w3.org/TR/dom/</a></p>
+<hr>
+<h3 id="CSSOM-api"><a href="#CSSOM-api" class="headerlink" title="CSSOM   api "></a>CSSOM  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/cssom/" target="_blank" rel="external">http://www.w3.org/TR/cssom/</a></p>
+<hr>
+<h3 id="CSSOM-View-Module-api"><a href="#CSSOM-View-Module-api" class="headerlink" title="CSSOM View Module   api "></a>CSSOM View Module  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/cssom-view/" target="_blank" rel="external">http://www.w3.org/TR/cssom-view/</a></p>
+<hr>
+<h3 id="XMLHttpRequest-Level-2-api"><a href="#XMLHttpRequest-Level-2-api" class="headerlink" title="XMLHttpRequest Level 2   api "></a>XMLHttpRequest Level 2  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/XMLHttpRequest2/" target="_blank" rel="external">http://www.w3.org/TR/XMLHttpRequest2/</a></p>
+<hr>
+<h3 id="XMLHttpRequest-api"><a href="#XMLHttpRequest-api" class="headerlink" title="XMLHttpRequest   api "></a>XMLHttpRequest  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/XMLHttpRequest/" target="_blank" rel="external">http://www.w3.org/TR/XMLHttpRequest/</a></p>
+<hr>
+<h3 id="Element-Traversal-api"><a href="#Element-Traversal-api" class="headerlink" title="Element Traversal   api "></a>Element Traversal  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/ElementTraversal/" target="_blank" rel="external">http://www.w3.org/TR/ElementTraversal/</a></p>
+<hr>
+<h3 id="HTML-Canvas-2D-Context-Level-2-api"><a href="#HTML-Canvas-2D-Context-Level-2-api" class="headerlink" title="HTML Canvas 2D Context, Level 2   api "></a>HTML Canvas 2D Context, Level 2  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/2dcontext2/" target="_blank" rel="external">http://www.w3.org/TR/2dcontext2/</a></p>
+<hr>
+<h3 id="HTML-Canvas-2D-Context-api"><a href="#HTML-Canvas-2D-Context-api" class="headerlink" title="HTML Canvas 2D Context   api "></a>HTML Canvas 2D Context  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/2dcontext/" target="_blank" rel="external">http://www.w3.org/TR/2dcontext/</a></p>
+<hr>
+<h3 id="Web-Storage-undefined"><a href="#Web-Storage-undefined" class="headerlink" title="Web Storage   undefined "></a>Web Storage  <strong> undefined </strong></h3><p><a href="http://www.w3.org/TR/webstorage/" target="_blank" rel="external">http://www.w3.org/TR/webstorage/</a></p>
+<hr>
+<h3 id="Web-Audio-API-api"><a href="#Web-Audio-API-api" class="headerlink" title="Web Audio API   api "></a>Web Audio API  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/webaudio/" target="_blank" rel="external">http://www.w3.org/TR/webaudio/</a></p>
+<hr>
+<h3 id="Indexed-Database-API-api"><a href="#Indexed-Database-API-api" class="headerlink" title="Indexed Database API   api "></a>Indexed Database API  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/IndexedDB/" target="_blank" rel="external">http://www.w3.org/TR/IndexedDB/</a></p>
+<hr>
+<h3 id="WebRTC-1-0-Real-time-Communication-Between-Browsers-api"><a href="#WebRTC-1-0-Real-time-Communication-Between-Browsers-api" class="headerlink" title="WebRTC 1.0: Real-time Communication Between Browsers   api "></a>WebRTC 1.0: Real-time Communication Between Browsers  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/webrtc/" target="_blank" rel="external">http://www.w3.org/TR/webrtc/</a></p>
+<hr>
+<h3 id="Clipboard-API-and-events-api"><a href="#Clipboard-API-and-events-api" class="headerlink" title="Clipboard API and events   api "></a>Clipboard API and events  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/clipboard-apis/" target="_blank" rel="external">http://www.w3.org/TR/clipboard-apis/</a></p>
+<hr>
+<h3 id="Resource-Timing-api"><a href="#Resource-Timing-api" class="headerlink" title="Resource Timing   api "></a>Resource Timing  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/resource-timing/" target="_blank" rel="external">http://www.w3.org/TR/resource-timing/</a></p>
+<hr>
+<h3 id="Web-Notifications-api"><a href="#Web-Notifications-api" class="headerlink" title="Web Notifications   api "></a>Web Notifications  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/notifications/" target="_blank" rel="external">http://www.w3.org/TR/notifications/</a></p>
+<hr>
+<h3 id="Selectors-API-api"><a href="#Selectors-API-api" class="headerlink" title="Selectors API   api "></a>Selectors API  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/selectors-api/" target="_blank" rel="external">http://www.w3.org/TR/selectors-api/</a></p>
+<hr>
+<h3 id="Selectors-API-Level-2-api"><a href="#Selectors-API-Level-2-api" class="headerlink" title="Selectors API Level 2   api "></a>Selectors API Level 2  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/selectors-api2/" target="_blank" rel="external">http://www.w3.org/TR/selectors-api2/</a></p>
+<hr>
+<h3 id="File-API-api"><a href="#File-API-api" class="headerlink" title="File API   api "></a>File API  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/FileAPI/" target="_blank" rel="external">http://www.w3.org/TR/FileAPI/</a></p>
+<hr>
+<h3 id="File-API-Directories-and-System-api"><a href="#File-API-Directories-and-System-api" class="headerlink" title="File API: Directories and System   api "></a>File API: Directories and System  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/file-system-api/" target="_blank" rel="external">http://www.w3.org/TR/file-system-api/</a></p>
+<hr>
+<h3 id="File-API-Writer-api"><a href="#File-API-Writer-api" class="headerlink" title="File API: Writer   api "></a>File API: Writer  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/file-writer-api/" target="_blank" rel="external">http://www.w3.org/TR/file-writer-api/</a></p>
+<hr>
+<h3 id="Web-Animations-1-0-api"><a href="#Web-Animations-1-0-api" class="headerlink" title="Web Animations 1.0   api "></a>Web Animations 1.0  <strong> api </strong></h3><p><a href="http://www.w3.org/TR/web-animations/" target="_blank" rel="external">http://www.w3.org/TR/web-animations/</a></p>
+<hr>
+<h3 id="Selectors-Level-3-css-core"><a href="#Selectors-Level-3-css-core" class="headerlink" title="Selectors Level 3   css-core "></a>Selectors Level 3  <strong> css-core </strong></h3><p><a href="http://www.w3.org/TR/selectors/" target="_blank" rel="external">http://www.w3.org/TR/selectors/</a></p>
+<hr>
+<h3 id="Selectors-Level-4-css-core"><a href="#Selectors-Level-4-css-core" class="headerlink" title="Selectors Level 4   css-core "></a>Selectors Level 4  <strong> css-core </strong></h3><p><a href="http://www.w3.org/TR/selectors4/" target="_blank" rel="external">http://www.w3.org/TR/selectors4/</a></p>
+<hr>
+<h3 id="Media-Queries-css-core"><a href="#Media-Queries-css-core" class="headerlink" title="Media Queries   css-core "></a>Media Queries  <strong> css-core </strong></h3><p><a href="http://www.w3.org/TR/css3-mediaqueries/" target="_blank" rel="external">http://www.w3.org/TR/css3-mediaqueries/</a></p>
+<hr>
+<h3 id="CSS-Cascading-and-Inheritance-Level-3-css-core"><a href="#CSS-Cascading-and-Inheritance-Level-3-css-core" class="headerlink" title="CSS Cascading and Inheritance Level 3   css-core "></a>CSS Cascading and Inheritance Level 3  <strong> css-core </strong></h3><p><a href="http://www.w3.org/TR/css3-cascade" target="_blank" rel="external">http://www.w3.org/TR/css3-cascade</a></p>
+<hr>
+<h3 id="CSS3-module-Syntax-css-core"><a href="#CSS3-module-Syntax-css-core" class="headerlink" title="CSS3 module: Syntax   css-core "></a>CSS3 module: Syntax  <strong> css-core </strong></h3><p><a href="http://www.w3.org/TR/css3-syntax" target="_blank" rel="external">http://www.w3.org/TR/css3-syntax</a></p>
+<hr>
+<h3 id="CSS-Animations-css-property"><a href="#CSS-Animations-css-property" class="headerlink" title="CSS Animations   css-property "></a>CSS Animations  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-animations" target="_blank" rel="external">http://www.w3.org/TR/css3-animations</a></p>
+<hr>
+<h3 id="CSS-Device-Adaptation-css-property"><a href="#CSS-Device-Adaptation-css-property" class="headerlink" title="CSS Device Adaptation   css-property "></a>CSS Device Adaptation  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css-device-adapt/" target="_blank" rel="external">http://www.w3.org/TR/css-device-adapt/</a></p>
+<hr>
+<h3 id="CSS-Namespaces-Module-css-property"><a href="#CSS-Namespaces-Module-css-property" class="headerlink" title="CSS Namespaces Module   css-property "></a>CSS Namespaces Module  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-namespace/" target="_blank" rel="external">http://www.w3.org/TR/css3-namespace/</a></p>
+<hr>
+<h3 id="CSS-Color-Module-Level-3-css-property"><a href="#CSS-Color-Module-Level-3-css-property" class="headerlink" title="CSS Color Module Level 3   css-property "></a>CSS Color Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-color" target="_blank" rel="external">http://www.w3.org/TR/css3-color</a></p>
+<hr>
+<h3 id="CSS-Values-and-Units-Module-Level-3-css-property"><a href="#CSS-Values-and-Units-Module-Level-3-css-property" class="headerlink" title="CSS Values and Units Module Level 3   css-property "></a>CSS Values and Units Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-values" target="_blank" rel="external">http://www.w3.org/TR/css3-values</a></p>
+<hr>
+<h3 id="CSS-Conditional-Rules-Module-Level-3-css-property"><a href="#CSS-Conditional-Rules-Module-Level-3-css-property" class="headerlink" title="CSS Conditional Rules Module Level 3   css-property "></a>CSS Conditional Rules Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-conditional" target="_blank" rel="external">http://www.w3.org/TR/css3-conditional</a></p>
+<hr>
+<h3 id="CSS-Flexible-Box-Layout-Module-css-property"><a href="#CSS-Flexible-Box-Layout-Module-css-property" class="headerlink" title="CSS Flexible Box Layout Module   css-property "></a>CSS Flexible Box Layout Module  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-flexbox" target="_blank" rel="external">http://www.w3.org/TR/css3-flexbox</a></p>
+<hr>
+<h3 id="CSS-Backgrounds-and-Borders-Module-Level-3-css-property"><a href="#CSS-Backgrounds-and-Borders-Module-Level-3-css-property" class="headerlink" title="CSS Backgrounds and Borders Module Level 3   css-property "></a>CSS Backgrounds and Borders Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-background" target="_blank" rel="external">http://www.w3.org/TR/css3-background</a></p>
+<hr>
+<h3 id="CSS-Image-Values-and-Replaced-Content-Module-Level-3-css-property"><a href="#CSS-Image-Values-and-Replaced-Content-Module-Level-3-css-property" class="headerlink" title="CSS Image Values and Replaced Content Module Level 3   css-property "></a>CSS Image Values and Replaced Content Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-images" target="_blank" rel="external">http://www.w3.org/TR/css3-images</a></p>
+<hr>
+<h3 id="CSS-Image-Values-and-Replaced-Content-Module-Level-4-css-property"><a href="#CSS-Image-Values-and-Replaced-Content-Module-Level-4-css-property" class="headerlink" title="CSS Image Values and Replaced Content Module Level 4   css-property "></a>CSS Image Values and Replaced Content Module Level 4  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css4-images/" target="_blank" rel="external">http://www.w3.org/TR/css4-images/</a></p>
+<hr>
+<h3 id="CSS-Speech-Module-css-property"><a href="#CSS-Speech-Module-css-property" class="headerlink" title="CSS Speech Module   css-property "></a>CSS Speech Module  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-speech" target="_blank" rel="external">http://www.w3.org/TR/css3-speech</a></p>
+<hr>
+<h3 id="CSS-Multi-column-Layout-Module-css-property"><a href="#CSS-Multi-column-Layout-Module-css-property" class="headerlink" title="CSS Multi-column Layout Module   css-property "></a>CSS Multi-column Layout Module  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-multicol" target="_blank" rel="external">http://www.w3.org/TR/css3-multicol</a></p>
+<hr>
+<h3 id="CSS-Marquee-Module-Level-3-css-property"><a href="#CSS-Marquee-Module-Level-3-css-property" class="headerlink" title="CSS Marquee Module Level 3   css-property "></a>CSS Marquee Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-marquee" target="_blank" rel="external">http://www.w3.org/TR/css3-marquee</a></p>
+<hr>
+<h3 id="CSS-Text-Decoration-Module-Level-3-css-property"><a href="#CSS-Text-Decoration-Module-Level-3-css-property" class="headerlink" title="CSS Text Decoration Module Level 3   css-property "></a>CSS Text Decoration Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css-text-decor-3/" target="_blank" rel="external">http://www.w3.org/TR/css-text-decor-3/</a></p>
+<hr>
+<h3 id="CSS-Basic-User-Interface-Module-Level-3-css-property"><a href="#CSS-Basic-User-Interface-Module-Level-3-css-property" class="headerlink" title="CSS Basic User Interface Module Level 3   css-property "></a>CSS Basic User Interface Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-ui/" target="_blank" rel="external">http://www.w3.org/TR/css3-ui/</a></p>
+<hr>
+<h3 id="Compositing-and-Blending-Level-1-css-property"><a href="#Compositing-and-Blending-Level-1-css-property" class="headerlink" title="Compositing and Blending Level 1   css-property "></a>Compositing and Blending Level 1  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/compositing-1/" target="_blank" rel="external">http://www.w3.org/TR/compositing-1/</a></p>
+<hr>
+<h3 id="CSS-Masking-Level-1-css-property"><a href="#CSS-Masking-Level-1-css-property" class="headerlink" title="CSS Masking Level 1   css-property "></a>CSS Masking Level 1  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css-masking/" target="_blank" rel="external">http://www.w3.org/TR/css-masking/</a></p>
+<hr>
+<h3 id="CSS-Exclusions-Module-Level-1-css-property"><a href="#CSS-Exclusions-Module-Level-1-css-property" class="headerlink" title="CSS Exclusions Module Level 1   css-property "></a>CSS Exclusions Module Level 1  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-exclusions" target="_blank" rel="external">http://www.w3.org/TR/css3-exclusions</a></p>
+<hr>
+<h3 id="CSS-Regions-Module-Level-1-css-property"><a href="#CSS-Regions-Module-Level-1-css-property" class="headerlink" title="CSS Regions Module Level 1   css-property "></a>CSS Regions Module Level 1  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-regions" target="_blank" rel="external">http://www.w3.org/TR/css3-regions</a></p>
+<hr>
+<h3 id="Filter-Effects-1-0-css-property"><a href="#Filter-Effects-1-0-css-property" class="headerlink" title="Filter Effects 1.0   css-property "></a>Filter Effects 1.0  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/filter-effects/" target="_blank" rel="external">http://www.w3.org/TR/filter-effects/</a></p>
+<hr>
+<h3 id="CSS-Box-Alignment-Module-Level-3-css-property"><a href="#CSS-Box-Alignment-Module-Level-3-css-property" class="headerlink" title="CSS Box Alignment Module Level 3   css-property "></a>CSS Box Alignment Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-align" target="_blank" rel="external">http://www.w3.org/TR/css3-align</a></p>
+<hr>
+<h3 id="CSS-Overflow-Module-Level-3-css-property"><a href="#CSS-Overflow-Module-Level-3-css-property" class="headerlink" title="CSS Overflow Module Level 3   css-property "></a>CSS Overflow Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css-overflow-3/" target="_blank" rel="external">http://www.w3.org/TR/css-overflow-3/</a></p>
+<hr>
+<h3 id="CSS-Grid-Layout-css-property"><a href="#CSS-Grid-Layout-css-property" class="headerlink" title="CSS Grid Layout   css-property "></a>CSS Grid Layout  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-grid-layout" target="_blank" rel="external">http://www.w3.org/TR/css3-grid-layout</a></p>
+<hr>
+<h3 id="CSS-Paged-Media-Module-Level-3-css-property"><a href="#CSS-Paged-Media-Module-Level-3-css-property" class="headerlink" title="CSS Paged Media Module Level 3   css-property "></a>CSS Paged Media Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-page" target="_blank" rel="external">http://www.w3.org/TR/css3-page</a></p>
+<hr>
+<h3 id="CSS-Counter-Styles-Level-3-css-property"><a href="#CSS-Counter-Styles-Level-3-css-property" class="headerlink" title="CSS Counter Styles Level 3   css-property "></a>CSS Counter Styles Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css-counter-styles-3/" target="_blank" rel="external">http://www.w3.org/TR/css-counter-styles-3/</a></p>
+<hr>
+<h3 id="CSS-Fonts-Module-Level-3-css-property"><a href="#CSS-Fonts-Module-Level-3-css-property" class="headerlink" title="CSS Fonts Module Level 3   css-property "></a>CSS Fonts Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-fonts" target="_blank" rel="external">http://www.w3.org/TR/css3-fonts</a></p>
+<hr>
+<h3 id="CSS-Transitions-css-property"><a href="#CSS-Transitions-css-property" class="headerlink" title="CSS Transitions   css-property "></a>CSS Transitions  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-transitions" target="_blank" rel="external">http://www.w3.org/TR/css3-transitions</a></p>
+<hr>
+<h3 id="CSS-Writing-Modes-Module-Level-3-css-property"><a href="#CSS-Writing-Modes-Module-Level-3-css-property" class="headerlink" title="CSS Writing Modes Module Level 3   css-property "></a>CSS Writing Modes Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-writing-modes" target="_blank" rel="external">http://www.w3.org/TR/css3-writing-modes</a></p>
+<hr>
+<h3 id="CSS-Text-Module-Level-3-css-property"><a href="#CSS-Text-Module-Level-3-css-property" class="headerlink" title="CSS Text Module Level 3   css-property "></a>CSS Text Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-text" target="_blank" rel="external">http://www.w3.org/TR/css3-text</a></p>
+<hr>
+<h3 id="CSS-Intrinsic-amp-Extrinsic-Sizing-Module-Level-3-css-property"><a href="#CSS-Intrinsic-amp-Extrinsic-Sizing-Module-Level-3-css-property" class="headerlink" title="CSS Intrinsic &amp; Extrinsic Sizing Module Level 3   css-property "></a>CSS Intrinsic &amp; Extrinsic Sizing Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-sizing" target="_blank" rel="external">http://www.w3.org/TR/css3-sizing</a></p>
+<hr>
+<h3 id="CSS-Transforms-css-property"><a href="#CSS-Transforms-css-property" class="headerlink" title="CSS Transforms   css-property "></a>CSS Transforms  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-transforms" target="_blank" rel="external">http://www.w3.org/TR/css3-transforms</a></p>
+<hr>
+<h3 id="CSS-Fragmentation-Module-Level-3-css-property"><a href="#CSS-Fragmentation-Module-Level-3-css-property" class="headerlink" title="CSS Fragmentation Module Level 3   css-property "></a>CSS Fragmentation Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-break" target="_blank" rel="external">http://www.w3.org/TR/css3-break</a></p>
+<hr>
+<h3 id="CSS-Grid-Positioning-Module-Level-3-css-property"><a href="#CSS-Grid-Positioning-Module-Level-3-css-property" class="headerlink" title="CSS Grid Positioning Module Level 3   css-property "></a>CSS Grid Positioning Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-positioning" target="_blank" rel="external">http://www.w3.org/TR/css3-positioning</a></p>
+<hr>
+<h3 id="CSS-2D-Transforms-css-property"><a href="#CSS-2D-Transforms-css-property" class="headerlink" title="CSS 2D Transforms   css-property "></a>CSS 2D Transforms  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-2d-transforms" target="_blank" rel="external">http://www.w3.org/TR/css3-2d-transforms</a></p>
+<hr>
+<h3 id="CSS-Template-Layout-Module-css-property"><a href="#CSS-Template-Layout-Module-css-property" class="headerlink" title="CSS Template Layout Module   css-property "></a>CSS Template Layout Module  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-layout" target="_blank" rel="external">http://www.w3.org/TR/css3-layout</a></p>
+<hr>
+<h3 id="CSS-Generated-Content-for-Paged-Media-Module-css-property"><a href="#CSS-Generated-Content-for-Paged-Media-Module-css-property" class="headerlink" title="CSS Generated Content for Paged Media Module   css-property "></a>CSS Generated Content for Paged Media Module  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-gcpm" target="_blank" rel="external">http://www.w3.org/TR/css3-gcpm</a></p>
+<hr>
+<h3 id="CSS3-Ruby-Module-css-property"><a href="#CSS3-Ruby-Module-css-property" class="headerlink" title="CSS3 Ruby Module   css-property "></a>CSS3 Ruby Module  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-ruby" target="_blank" rel="external">http://www.w3.org/TR/css3-ruby</a></p>
+<hr>
+<h3 id="CSS-Lists-and-Counters-Module-Level-3-css-property"><a href="#CSS-Lists-and-Counters-Module-Level-3-css-property" class="headerlink" title="CSS Lists and Counters Module Level 3   css-property "></a>CSS Lists and Counters Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-lists" target="_blank" rel="external">http://www.w3.org/TR/css3-lists</a></p>
+<hr>
+<h3 id="CSS-3D-Transforms-Module-Level-3-css-property"><a href="#CSS-3D-Transforms-Module-Level-3-css-property" class="headerlink" title="CSS 3D Transforms Module Level 3   css-property "></a>CSS 3D Transforms Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-3d-transforms" target="_blank" rel="external">http://www.w3.org/TR/css3-3d-transforms</a></p>
+<hr>
+<h3 id="CSS-Grid-Positioning-Module-Level-3-css-property-1"><a href="#CSS-Grid-Positioning-Module-Level-3-css-property-1" class="headerlink" title="CSS Grid Positioning Module Level 3   css-property "></a>CSS Grid Positioning Module Level 3  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-grid" target="_blank" rel="external">http://www.w3.org/TR/css3-grid</a></p>
+<hr>
+<h3 id="CSS-basic-box-model-css-property"><a href="#CSS-basic-box-model-css-property" class="headerlink" title="CSS basic box model   css-property "></a>CSS basic box model  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-box" target="_blank" rel="external">http://www.w3.org/TR/css3-box</a></p>
+<hr>
+<h3 id="CSS3-Hyperlink-Presentation-Module-css-property"><a href="#CSS3-Hyperlink-Presentation-Module-css-property" class="headerlink" title="CSS3 Hyperlink Presentation Module   css-property "></a>CSS3 Hyperlink Presentation Module  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-hyperlinks" target="_blank" rel="external">http://www.w3.org/TR/css3-hyperlinks</a></p>
+<hr>
+<h3 id="The-CSS-‘Reader’-Media-Type-css-property"><a href="#The-CSS-‘Reader’-Media-Type-css-property" class="headerlink" title="The CSS ‘Reader’ Media Type   css-property "></a>The CSS ‘Reader’ Media Type  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-reader" target="_blank" rel="external">http://www.w3.org/TR/css3-reader</a></p>
+<hr>
+<h3 id="CSS3-module-Presentation-Levels-css-property"><a href="#CSS3-module-Presentation-Levels-css-property" class="headerlink" title="CSS3 module: Presentation Levels   css-property "></a>CSS3 module: Presentation Levels  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-preslev" target="_blank" rel="external">http://www.w3.org/TR/css3-preslev</a></p>
+<hr>
+<h3 id="CSS3-Generated-and-Replaced-Content-Module-css-property"><a href="#CSS3-Generated-and-Replaced-Content-Module-css-property" class="headerlink" title="CSS3 Generated and Replaced Content Module   css-property "></a>CSS3 Generated and Replaced Content Module  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-content" target="_blank" rel="external">http://www.w3.org/TR/css3-content</a></p>
+<hr>
+<h3 id="CSS3-module-Border-css-property"><a href="#CSS3-module-Border-css-property" class="headerlink" title="CSS3 module: Border   css-property "></a>CSS3 module: Border  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-border" target="_blank" rel="external">http://www.w3.org/TR/css3-border</a></p>
+<hr>
+<h3 id="CSS3-module-line-css-property"><a href="#CSS3-module-line-css-property" class="headerlink" title="CSS3 module: line   css-property "></a>CSS3 module: line  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-linebox" target="_blank" rel="external">http://www.w3.org/TR/css3-linebox</a></p>
+<hr>
+<h3 id="CSS3-module-Web-Fonts-css-core"><a href="#CSS3-module-Web-Fonts-css-core" class="headerlink" title="CSS3 module: Web Fonts   css-core "></a>CSS3 module: Web Fonts  <strong> css-core </strong></h3><p><a href="http://www.w3.org/TR/css3-webfonts" target="_blank" rel="external">http://www.w3.org/TR/css3-webfonts</a></p>
+<hr>
+<h3 id="CSS3-introduction-css-property"><a href="#CSS3-introduction-css-property" class="headerlink" title="CSS3 introduction   css-property "></a>CSS3 introduction  <strong> css-property </strong></h3><p><a href="http://www.w3.org/TR/css3-roadmap" target="_blank" rel="external">http://www.w3.org/TR/css3-roadmap</a></p>
+<hr>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2012/09/08/3151-wileetest/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2012/09/08/3151-wileetest/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2012/09/08/3151-wileetest/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
+      <a href="/2012/08/12/3155-fe/" target="_blank"> 简单的选项卡DEMO</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2012-08-12T07:06:50.000Z"><i class="fa fa-clock-o"></i><span> 2012-08-12 03:06</span></time>
+  
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/fe-demo/">fe, demo</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <p>给初学JS的老哥写了一个很简单的选项卡DEMO，配上最通俗易懂的注释;这是DEMO <a href="/demo/tab.html">/demo/tab.html</a></p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;简易选项卡DEMO&lt;/title&gt;
+&lt;meta charset=&quot;UTF-8&quot; /&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://libs.baidu.com/jquery/1.9.0/jquery.js&quot;&gt;&lt;/script&gt;
+&lt;style&gt;
+*{
+    margin:0px;
+    padding:0px;
+}
+.clearfix:after {
+    content:&apos;\20&apos;;
+    display:block;
+    height:0;
+    clear:both;
+}
+.clearfix {
+    zoom:1;
+}
+
+.wrapper{
+    width:500px;
+    border:1px solid #dfdfdf;
+}
+.wrapper .tab-nav{
+    background: #efefef;
+    border-bottom: 1px solid #dfdfdf;
+}
+.wrapper .tab-nav-list{
+    display: block;
+    float:left;
+    height:30px;
+    width:160px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition:.3s;
+}
+.wrapper .tab-nav-list:hover{
+    background: #dddddd;
+}
+
+.wrapper .tab-content{
+    display:none;
+    line-height: 30px;
+    padding-left: 30px;
+}
+.wrapper .tab-content.active{
+    display:block;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;wrapper&quot;&gt;
+
+        &lt;div class=&quot;tab-nav clearfix&quot;&gt;
+            &lt;ul class=&quot;tab-ul clearfix&quot; id=&quot;tabNav&quot;&gt;
+                &lt;li class=&quot;tab-nav-list&quot; data-tab=&quot;a&quot;&gt;选项一&lt;/li&gt;
+                &lt;li class=&quot;tab-nav-list&quot; data-tab=&quot;b&quot;&gt;选项二&lt;/li&gt;
+                &lt;li class=&quot;tab-nav-list&quot; data-tab=&quot;c&quot;&gt;选项三&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;tab-wrapper&quot; id=&quot;tabWrapper&quot;&gt;
+            &lt;ul class=&quot;tab-content active&quot; data-tab=&quot;a&quot;&gt;
+                &lt;li&gt;测试一测试一测试一测试一测试一测试一测试…&lt;/li&gt;
+                &lt;li&gt;测试一测试一测试一测试一测试一测试一测试…&lt;/li&gt;
+                &lt;li&gt;测试一测试一测试一测试一测试一测试一测试…&lt;/li&gt;
+                &lt;li&gt;测试一测试一测试一测试一测试一测试一测试…&lt;/li&gt;
+                &lt;li&gt;测试一测试一测试一测试一测试一测试一测试…&lt;/li&gt;
+                &lt;li&gt;测试一测试一测试一测试一测试一测试一测试…&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;ul class=&quot;tab-content&quot; data-tab=&quot;b&quot;&gt;
+                &lt;li&gt;测试二测试二测试二测试二测试二测试二测试…&lt;/li&gt;
+                &lt;li&gt;测试二测试二测试二测试二测试二测试二测试…&lt;/li&gt;
+                &lt;li&gt;测试二测试二测试二测试二测试二测试二测试…&lt;/li&gt;
+                &lt;li&gt;测试二测试二测试二测试二测试二测试二测试…&lt;/li&gt;
+                &lt;li&gt;测试二测试二测试二测试二测试二测试二测试…&lt;/li&gt;
+                &lt;li&gt;测试二测试二测试二测试二测试二测试二测试…&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;ul class=&quot;tab-content&quot; data-tab=&quot;c&quot;&gt;
+                &lt;li&gt;测试三测试三测试三测试三测试三测试三测试…&lt;/li&gt;
+                &lt;li&gt;测试三测试三测试三测试三测试三测试三测试…&lt;/li&gt;
+                &lt;li&gt;测试三测试三测试三测试三测试三测试三测试…&lt;/li&gt;
+                &lt;li&gt;测试三测试三测试三测试三测试三测试三测试…&lt;/li&gt;
+                &lt;li&gt;测试三测试三测试三测试三测试三测试三测试…&lt;/li&gt;
+                &lt;li&gt;测试三测试三测试三测试三测试三测试三测试…&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;script&gt;
+
+$(&apos;#tabNav&apos;).mouseover(changeView)
+//$(&apos;#tabNav&apos;)为获取id=&quot;tabNav&quot;的标签
+//对id=&quot;tabNav&quot;的节点绑定mouseover(鼠标浮动在标签上的时候)事件
+//事实上 $(&apos;#tabNav&apos;).mouseover() 就是一个函数，函数的参数也是一个function: 即下面的changeView函数；mouseover()会传递一个event（事件对象），该event包括：具体在哪一个标签节点上，鼠标此时的位置等等
+
+//顺便说一下，如果不想在鼠标浮动在标签上就切换，而是想在点击的时候才切换可以使用click方法：
+//就像这样：$(&apos;#tabNav&apos;).click(changeView)
+
+function changeView(event){
+//该方法的参数是event,也就是鼠标浮动的当时状态的一个对象，包括：具体在哪一个标签节点上，鼠标此时的位置等等
+    var target = event.target,//获取鼠标此时正在具体哪一个标签上，对应的为&lt;li class=&quot;tab-nav-list&quot; data-tab=&quot;a&quot;&gt;选项一&lt;/li&gt; ，或 &lt;li class=&quot;tab-nav-list&quot; data-tab=&quot;b&quot;&gt;选项二&lt;/li&gt; ， 或 &lt;li class=&quot;tab-nav-list&quot; data-tab=&quot;c&quot;&gt;选项三&lt;/li&gt; 
+
+        curTab = $(target).attr(&apos;data-tab&apos;);//获取该标签的data-tab属性，这并不是一个标签的常用属性，而是用来标记该标签的自定义属性
+
+    if(curTab){//如果此时鼠标浮动的标签有data-tab属性的话就执行下面的语句
+
+        var tabs = $(&apos;#tabWrapper .tab-content&apos;),//获取所有的选项卡,类似于CSS中的#tabWrapper .tab-content ,这是一个数组
+
+            $tab;
+
+        for(var i=0;i&lt;tabs.length;i++){
+            //用一个for循环来获取所有的选项卡，一一做处理
+            //处理的原理很简单：如果当前选项的data-tab属性等于刚刚获取到的选项卡data-tab属性的话，就给他加一个active类；如果不等于的话就把它的active类去掉
+            //在最上面的CSS声明中有一个类.class{display:none}
+            //这样就可以做到：对鼠标选中的类加上active属性，对鼠标没有选中的类删除active从而做到了想要隐藏的就隐藏，想要展现的就展现的目的
+
+            if($(tabs[i]).attr(&apos;data-tab&apos;) == curTab){
+            //$(tabs[i])就是for循环中单一循环体，用来判断它的data-tab属性是否等于刚刚鼠标浮动在tab上的data-tab属性
+                $(tabs[i]).addClass(&apos;active&apos;)
+            }else{                
+                $(tabs[i]).removeClass(&apos;active&apos;)
+            }
+
+        }
+    }
+
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2012/08/12/3155-fe/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2012/08/12/3155-fe/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2012/08/12/3155-fe/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+<nav id="pagination">
+  
+    <a href="/page/4/" class="alignleft prev"><i class="fa fa-long-arrow-left"></i>prev</a>
+  
+  
+  <div class="clearfix"></div>
+</nav>
+
+<script src="/js/jquery.anystretch.min.js" type="text/javascript"></script>
+<script src="/js/cover.js" type="text/javascript"></script>
+<script src="/js/skrollr.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+	if(window.ontouchstart === undefined){
+		//视差滚动仅仅用在PC端
+		setTimeout(function(){
+			$('#profile').attr({"data-0":"top:0px;opacity:1;","data-1000":"top:500px;opacity:.2;"});//logo
+			$('#socials').attr({"data-0":"margin-top:80px;","data-1000":"margin-top:-30px;"});//社交logo
+			$('.anystretch img').attr({'data-0':'margin-top:0px','data-1000':'margin-top:150px','data-1001':'margin-top:0px'});//大bnner
+			var Skrollr = skrollr.init();//视差滚动
+		},300)
+	}
+</script>
+
+
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div>
+  
+  &copy; 2016 xiongwilee
+  
+</div>
+Powered by <a href="http://zespia.tw/hexo/" title="Hexo" target="_blank" rel="external">Hexo</a> and <a href="http://pages.github.com/" title="GitHub Pages" target="_blank" rel="external">GitHub Pages</a>
+
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery.imagesloaded.min.js" type="text/javascript"></script>
+<script src="/js/gallery.js" type="text/javascript"></script>
+<script src="/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+
+
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox({
+      'titlePosition': 'inside'
+    });
+  })(jQuery);
+  </script>
+
+
+
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"xiongwilee"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+</body>
+</html>
