@@ -33,6 +33,18 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 html body{
 	background:-webkit-radial-gradient(center,#3F899C 0%, #002B36 80%);
 }
+html .reveal pre code{
+	padding: 10px;
+	font-size: 14px;
+	line-height: 1.5em;
+}
+html .reveal blockquote{
+	border-left: 5px solid rgba(255,255,255,.5);
+	padding: 10px;
+}
+html .reveal blockquote p{
+	color: #eee8d5;
+}
 </style>
 
 <div style="text-align:center;">
@@ -52,7 +64,421 @@ html body{
 
 
 
-# test</script>
+## 从异步操作说起
+
+【参考】 http://es6.ruanyifeng.com/#docs/async
+
+
+
+### callback
+
+```
+fs.readFile('/etc/passwd', function (err, data) {
+  if (err) throw err;
+  console.log(data);
+});
+```
+
+
+
+### promise
+
+```
+var readFile = require('fs-readfile-promise');
+
+readFile(fileA)
+.then(function(data){
+  console.log(data.toString());
+})
+.then(function(){
+  return readFile(fileB);
+})
+.then(function(data){
+  console.log(data.toString());
+})
+.catch(function(err) {
+  console.log(err);
+});
+```
+
+
+
+### ES6:Generator函数
+
+```
+// generator.js
+function* gen(x){
+  var y = yield x + 2;
+  return y;
+}
+
+var g = gen(1); // g返回一个遍历器，不会直接返回执行结果
+
+console.log(g.next()); // { value: 3, done: false }
+
+console.log(g.next()); // { value: undefined, done: true }
+```
+
+
+
+基于co模块的Generator函数：
+
+```
+// co.js
+function* gen(x){
+	console.log('x:',x);
+
+  var y = yield step_1(x);
+  	console.log('y:',y);
+
+  var z = yield step_2(y);
+  	console.log('z:',z)
+
+  return z;
+}
+
+co(gen,1);
+```
+
+
+
+异步并发：
+
+```
+// co_1.js
+function* gen(x){
+  var res = yield [
+    step_1(1),
+    step_2(2)
+  ];
+  return z;
+}
+
+co(gen,1);
+```
+
+
+
+### ES7:async函数
+
+ES7提供了async函数，使得异步操作变得更加方便。
+
+
+
+我们以后有机会再讲。。。
+
+
+
+但是，你这么理解：co模块就是async/await的语法糖。
+
+【参考】 https://github.com/tj/co
+
+
+
+## 基于Generator函数的koajs
+
+【项目地址】https://github.com/koajs/koa
+
+<div style="text-align:center">
+<img src="https://camo.githubusercontent.com/674563115c4e0d4e5d99440b916952ad795c498e/68747470733a2f2f646c2e64726f70626f7875736572636f6e74656e742e636f6d2f752f363339363931332f6b6f612f6c6f676f2e706e67" alt="koa" title="koa" style="box-shadow:none;margin:5% 0;border:none;background:none;height:254px;">
+</div>
+
+
+
+### koa最简单的demo
+
+```
+// koa.js:
+var koa = require('koa');
+var app = koa();
+
+// response
+
+app.use(function *(){
+  this.body = 'Hello World';
+});
+
+app.listen(3000);
+```
+
+
+
+### koa异步处理
+
+```
+// koa_1.js:
+app.use(function *(){
+  
+  var y = yield step_1(1);
+
+  var z = yield step_2(y);
+
+  this.body = z;
+});
+
+app.listen(3000);
+```
+
+
+
+但，异步处理只是koa的其中一个特性；
+
+如果要实现完整的nodejs服务端框架，依赖一个koa是远远不够的……
+
+
+
+### koa的middleware模型
+
+再看一个例子：
+```
+// koa_2.js:
+var koa = require('koa');
+var app = koa();
+
+app.use(function *(next){
+	this.set('test','test');
+	
+	yield next;
+});
+
+// response
+app.use(function *(){
+  this.body = 'Hello World';
+});
+
+app.listen(3000);
+```
+
+
+
+再看koa的源码：`lib/application.js`
+
+`app.listen`:
+```
+/*...*/
+app.listen = function(){
+  debug('listen');
+  var server = http.createServer(this.callback());
+  return server.listen.apply(server, arguments);
+};
+```
+
+
+`app.callback`:
+```
+/*...*/
+app.callback = function(){
+  /*...*/
+  var fn = this.experimental
+    ? compose_es7(this.middleware)
+    : co.wrap(compose(this.middleware));
+  var self = this;
+
+  /*...*/
+
+  return function(req, res){
+    /*...*/
+    fn.call(ctx).then(function () {
+      respond.call(ctx);
+    }).catch(ctx.onerror);
+  }
+};
+```
+
+
+`app.use`:
+```
+/*...*/
+app.use = function(fn){
+  /*...*/
+  this.middleware.push(fn);
+  return this;
+};
+```
+
+
+
+![https://sfault-image.b0.upaiyun.com/889/921/889921638-555d5a78eb325](https://sfault-image.b0.upaiyun.com/889/921/889921638-555d5a78eb325)
+
+【引自】 https://segmentfault.com/a/1190000002783230
+
+
+
+BTW:刚刚讲到koa 1.x，koa 2其实也已经到alpha版本。
+
+但是……
+
+
+
+> We do not plan to release v2 as "stable" until async/await hits node.js. Requiring babel to run your server is just not good developer experience.
+
+> [译] 直到node.js支持async/await之后我们才会发布Koa2的稳定版本，因为依赖babel去启动你的node server并不是一种很好的开发体验
+
+【引自】 https://github.com/koajs/koa/issues/533
+
+
+
+那么，技术层面我们不用拘泥于是否要考虑最新版本的koa。。。
+
+
+
+## 接着，koa-grace诞生了！
+
+<div style="text-align:center">
+<img src="https://github.com/xiongwilee/koa-grace/raw/master/logo.png?raw=true" alt="koa-grace" width="255px" title="A koa MVC framework" style="box-shadow:none;margin:5% 0;border:none;background:none;height:254px;">
+
+</div>
+
+【项目地址】 https://github.com/xiongwilee/koa-grace
+
+【文档】 https://github.com/xiongwilee/koa-grace/wiki/koa-grace
+
+
+
+> 虽说koa-grace是一个完整的MVC框架 ， 但其本质是基于一种多站点解决方案的koa中间件的集合。
+
+> 其核心中间件包括但不仅限于： [koa-router](https://github.com/alexmingoia/koa-router) , [koa-views](https://github.com/queckezz/koa-views) , [koa-mount](https://github.com/koajs/mount) , [koa-static](https://github.com/koajs/static/) , [koa-grace-vhost](https://github.com/koa-grace/koa-grace-vhost) , [koa-grace-router](https://github.com/koa-grace/koa-grace-router) , [koa-grace-proxy](https://github.com/koa-grace/koa-grace-proxy) , [koa-grace-model](https://github.com/koa-grace/koa-grace-model) , [koa-grace-mongo](https://github.com/koa-grace/koa-grace-mongo) , ...
+
+
+
+### 特征
+
+* 一个node服务，多个站点应用；
+* yield 异步语法支持，忘掉回调噩梦；
+* 继承koa中间件，扩展性更强；
+* 支持路径即路由，更优雅的路由方式；
+* RESTful数据代理支持，前后端完全解耦； 
+* ……
+
+
+
+### 安装运行
+
+https://github.com/xiongwilee/koa-grace/wiki/koa-grace#2-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B
+
+
+
+### 源码
+
+```
+let app = koa();
+
+// bodyparser
+app.use(bodyparser({
+  formLimit:'5mb'
+}));
+
+// gzip
+app.use(gzip());
+
+let vhosts = [];
+for (let item in config_vhost) {
+  vhosts.push(item);
+}
+
+vhosts = vhosts.map(function(item) {
+  let vapp = koa();
+
+  let appName = config_vhost[item];
+  let appPath = path.resolve(config_path_project + '/' + appName);
+
+  // 如果配置了连接数据库
+  config_mongo.api[appName] && vapp.use(mongo(vapp,{
+    root: appPath + '/model/mongo',
+    connect: config_mongo.api[appName]
+  }))
+
+  // 配置api
+  vapp.use(proxy(vapp, {
+    api: config_api
+  }));
+
+  // 配置默认路由
+  vapp.use(model(vapp, {
+    root: appPath + '/controller'
+  }));
+
+  // 配置模板引擎
+  let template = (typeof config_template == 'object' ? config_template[appName] : config_template);
+  vapp.use(views(appPath + '/views', {
+    root: appPath + '/views',
+    map: {
+      html: template || 'swig'
+    }
+  }));
+
+  // 配置静态文件路由
+  vapp.use(mount('/static',
+    koastatic(appPath + '/static')
+  ));
+
+  // 配置控制器文件路由
+  vapp.use(router(vapp, {
+    root: appPath + '/controller',
+    default_path: config_path.default_path[appName],
+    domain: item
+  }));
+
+  vapp.use(logger());
+
+  vapp.on('error', function(err, ctx) {
+    log.error('server error', err, ctx);
+  });
+
+  return {
+    host: item,
+    app: vapp
+  };
+}).filter(function(item) {
+  return !!item;
+});
+
+// 注入vhost路由
+app.use(vhost(vhosts));
+
+module.exports = app;
+```
+
+
+
+## 基于koa-grace实现的团队博客
+【网址】 http://mlsfe.biz
+
+
+
+### 路由及控制器 - Router&Controller
+【参考】 https://github.com/xiongwilee/koa-grace/wiki/koa-grace#32-%E8%B7%AF%E7%94%B1%E5%8F%8A%E6%8E%A7%E5%88%B6%E5%99%A8---routercontroller
+
+
+
+### 数据库 - Database
+【参考】 https://github.com/xiongwilee/koa-grace/wiki/koa-grace#33-%E6%95%B0%E6%8D%AE%E5%BA%93---database
+
+
+
+### 代理 - Proxy
+【参考】 https://github.com/xiongwilee/koa-grace/wiki/koa-grace#33-%E6%95%B0%E6%8D%AE%E5%BA%93---database
+
+
+
+## 总结
+
+
+
+今天讲的所有内容都是**19天**内搞定的！！！
+
+
+
+19天：**研究node异步** + **研究koa** + **开发koa-grace** + **开发CMS:http://mlsfe.biz**
+
+
+名字的来历：**女朋友的英文名（Grace Wang）,同时正好koa-grace在2月14号发布**。
+
+
+
+## THANK YOU!
+
+Q&A </script>
     </section>
   </div>
 </div>
