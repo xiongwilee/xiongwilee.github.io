@@ -121,6 +121,95 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 
   
     <h1 class="title">
+      <a href="/2016/03/24/office-node/" target="_blank"> 在开发机中玩转Node.js</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2016-03-24T11:21:00.000Z"><i class="fa fa-clock-o"></i><span> 2016-03-24 07:21</span></time>
+  
+  
+  <div class="categories">
+  	<i class="fa fa-folder-open"></i>
+    <a href="/categories/技术/">技术</a>
+  </div>
+
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/Node-js/">Node.js</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <h1 id="在开发机中玩转Node-js"><a href="#在开发机中玩转Node-js" class="headerlink" title="在开发机中玩转Node.js"></a>在开发机中玩转Node.js</h1><h2 id="一、查看Node-js版本"><a href="#一、查看Node-js版本" class="headerlink" title="一、查看Node.js版本"></a>一、查看Node.js版本</h2><p>开发机已经预装了Node.js，你可以直接在命令行里输入<code>node -v</code>查看Node.js版本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ node -v</span><br></pre></td></tr></table></figure>
+<h2 id="二、命令行中执行node脚本"><a href="#二、命令行中执行node脚本" class="headerlink" title="二、命令行中执行node脚本"></a>二、命令行中执行node脚本</h2><p>也可以输入<code>node</code>，然后在命令行里执行Node.js脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ node&#10;&#62; console.log(&#39;hello world!&#39;) # &#36755;&#20837;&#23436;&#20043;&#21518;&#22238;&#36710;</span><br></pre></td></tr></table></figure>
+<p><img src="http://wilee.me/demo/photo/node.gif" alt=""></p>
+<h2 id="三、执行Node-js文件"><a href="#三、执行Node-js文件" class="headerlink" title="三、执行Node.js文件"></a>三、执行Node.js文件</h2><p>你还可以在任意目录创建一个<code>helloworld.js</code>的文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">console.log(&#39;hello world!&#39;);</span><br></pre></td></tr></table></figure>
+<p>然后用<code>node</code>命令执行它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ node helloworld.js</span><br></pre></td></tr></table></figure>
+<p><img src="http://wilee.me/demo/photo/node_1.gif" alt=""></p>
+<h2 id="四、写一个简单的node-server-服务器"><a href="#四、写一个简单的node-server-服务器" class="headerlink" title="四、写一个简单的node server(服务器)"></a>四、写一个简单的node server(服务器)</h2><p>首先，创建一个<code>server.js</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// &#31471;&#21475;&#21495;&#33258;&#24049;&#20889;&#65292;&#19981;&#35201;&#19982;&#29616;&#26377;&#30340;&#31471;&#21475;&#21495;&#20914;&#31361;&#23601;&#34892;&#10;var port = &#39;8000&#39;;&#10;&#10;// &#21019;&#24314;server,&#24182;&#36755;&#20986;&#39;hello world!&#39;&#10;var server = require(&#39;http&#39;).createServer(function(req, res)&#123;&#10;  res.end(&#39;hello world!&#39;);&#10;&#125;);&#10;&#10;// &#30417;&#21548;&#21018;&#21018;&#23450;&#20041;&#30340;&#31471;&#21475;&#65292;&#21551;&#21160;server&#10;server.listen(port);&#10;&#10;console.log(&#39;server started at http://192.168.1.10:&#39;+port);</span><br></pre></td></tr></table></figure>
+<p>然后，执行<code>node server.js</code>。</p>
+<p>看到输出<code>server started at http://192.168.1.10:8000</code> 说明服务已经启动。</p>
+<p>最后，打开浏览器访问：<a href="http://192.168.1.10:8000" target="_blank" rel="external">http://192.168.1.10:8000</a>  , 就可以看到’hello world!’了！</p>
+<p><img src="http://wilee.me/demo/photo/node_2.gif" alt=""></p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2016/03/24/office-node/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2016/03/24/office-node/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2016/03/24/office-node/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
       <a href="/2016/03/03/koa-grace/" target="_blank"><i class="fa fa-file-powerpoint-o"></i> koa-grace</a>
     </h1>
   
@@ -543,67 +632,6 @@ $ pm2 start node ./bin/server.js
           <div class="alignright"> 
             <a href="http://wilee.me/2015/06/10/tsinghua_web_frontend_slider/#comment" class="comment-link">
               <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2015/06/10/tsinghua_web_frontend_slider/">&nbsp;
-              </span>
-            </a>
-          </div>
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  <div class="post-content">
-    <header>
-      
-       
-
-  
-    <h1 class="title">
-      <a href="/2015/06/08/slider-test/" target="_blank"><i class="fa fa-file-powerpoint-o"></i> 我所理解的登录</a>
-    </h1>
-  
-
-<div class="collection">
-  <time datetime="2015-06-08T15:32:22.000Z"><i class="fa fa-clock-o"></i><span> 2015-06-08 11:32</span></time>
-  
-  
-</div>
-<div class="clear"></div>
-      
-    </header>
-    
-      <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"><i class="fa fa-chevron-left"></i></div>
-    <div class="next"><i class="fa fa-chevron-right"></i></div>
-  </div>
-</div>
-    
-    <div class="entry">
-      
-        <p>我所理解的登录</p>
-      
-    </div>
-    <footer>
-      
-        <div class="alignleft">
-            <a href="/2015/06/08/slider-test/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
-        </div>
-        
-        
-          <div class="alignright"> 
-            <a href="http://wilee.me/2015/06/08/slider-test/#comment" class="comment-link">
-              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2015/06/08/slider-test/">&nbsp;
               </span>
             </a>
           </div>
