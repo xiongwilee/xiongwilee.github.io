@@ -118,6 +118,197 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 
   
     <h1 class="title">
+      <a href="/2016/08/14/koa_grace_sfb/" target="_blank"> 趣店前端团队基于koajs的前后端分离实践</a>
+    </h1>
+  
+
+<div class="collection">
+  <time datetime="2016-08-14T11:32:00.000Z"><i class="fa fa-clock-o"></i><span> 2016-08-14 07:32</span></time>
+  
+  
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/tags/fe-nojs-koa/">fe, nojs, koa</a>
+  </div>
+
+</div>
+<div class="clear"></div>
+      
+    </header>
+    
+      <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"><i class="fa fa-chevron-left"></i></div>
+    <div class="next"><i class="fa fa-chevron-right"></i></div>
+  </div>
+</div>
+    
+    <div class="entry">
+      
+        <h1 id="趣店前端团队基于koajs的前后端分离实践"><a href="#趣店前端团队基于koajs的前后端分离实践" class="headerlink" title="趣店前端团队基于koajs的前后端分离实践"></a>趣店前端团队基于koajs的前后端分离实践</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>关于<strong>前后端分离</strong>，我的感觉其实也是：这么老土的话题，为什么还要拿出来老调重弹？</p>
+<p>但越来越发现基于前后端分离的类RESTful架构，能很好的满足WebAPP的业务需求。尤其是WebAPP+NativeAPP产品为主的中小型公司，能让整个公司的服务端研发和部署更灵活。</p>
+<p><strong>PS：</strong>已经了解前后端分离和koajs(不喜欢看背景和扯淡)同学可以直接跳到：三、如何实践。</p>
+<h2 id="一、什么是前后端分离？"><a href="#一、什么是前后端分离？" class="headerlink" title="一、什么是前后端分离？"></a>一、什么是前后端分离？</h2><p><strong>前后端分离</strong>的概念和优势在这里不再赘述，有兴趣的同学可以看各个前辈们一系列总结和讨论：</p>
+<ul>
+<li>系列文章：<a href="http://blog.jobbole.com/71675/" target="_blank" rel="external">前后端分离的思考与实践(1-6)</a></li>
+<li>slider: <a href="http://2014.jsconf.cn/slides/herman-taobaoweb/#/" target="_blank" rel="external">淘宝前后端分离实践</a></li>
+<li>知乎提问：<ul>
+<li><a href="https://www.zhihu.com/question/23512853" target="_blank" rel="external">如何评价淘宝 UED 的 Midway Framework 前后端分离？</a> </li>
+<li><a href="https://www.zhihu.com/question/28207685" target="_blank" rel="external">Web 前后端分离的意义大吗？</a></li>
+</ul>
+</li>
+</ul>
+<p>尤其是《前后端分离的思考与实践》系列文章非常全面的阐述了前后端分离的意义和技术实现。如果不想看上面的文章，可以在脑海里留下这样一个轮廓就好：</p>
+<p><img src="https://github.com/xiongwilee/demo/blob/master/photo/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB.png?raw=true" alt="前后端分离"></p>
+<p>本文主要阐述趣店团队基于Koajs的前后端分离实践方案。</p>
+<h2 id="二、为什么选择koa？"><a href="#二、为什么选择koa？" class="headerlink" title="二、为什么选择koa？"></a>二、为什么选择koa？</h2><p><a href="https://github.com/koajs/koa" target="_blank" rel="external">koa</a>是由Express 原班人马打造的一个更小、更健壮、更富有表现力的 Web 框架。（<a href="http://koajs.com" target="_blank" rel="external">koa官网</a>需用梯子，中文文档可以参考郭宇大神的翻译：<a href="https://github.com/guo-yu/koa-guide" target="_blank" rel="external">koa中文文档</a>，这里也不详细介绍。）</p>
+<p><img src="https://github.com/xiongwilee/demo/blob/master/photo/koa.png?raw=true" alt="koa"></p>
+<p>看到koa之后，简单看了下文档和源码，立刻感觉<strong>koa不就是为前后端分离而诞生的轻量级框架吗？</strong></p>
+<p>因为：</p>
+<ul>
+<li>如果要用koa实现一整套类似于PHP的Laravel或者Ruby on Rails的服务端MVC框架其实还有很长的路要走；</li>
+<li>koa中间件的思路可以很好的被前后端分离的思路利用起来，比如：路由、模板引擎、数据代理等等；</li>
+<li>koa基于ES6的generator特性(不了解generator的同学可以参考<a href="http://es6.ruanyifeng.com/#docs/async" target="_blank" rel="external">阮一峰老师的文章</a>)，利用<a href="https://github.com/tj/co" target="_blank" rel="external">co</a>等模块让前端同学写一个路由再简单不过；</li>
+<li>……</li>
+</ul>
+<p>总之，koa给我的第一印象就是：如果用它来实现一套前后端分离的框架，非常<code>高效</code>、<code>轻量</code>、<code>易扩展</code>。</p>
+<h2 id="三、如何实践？"><a href="#三、如何实践？" class="headerlink" title="三、如何实践？"></a>三、如何实践？</h2><h3 id="1、刀耕火种的年代"><a href="#1、刀耕火种的年代" class="headerlink" title="1、刀耕火种的年代"></a>1、刀耕火种的年代</h3><p>在谈如何实现基于koajs的前后端分离框架的之前，必须提一下在做分离之前趣店（原趣分期）的情况：</p>
+<ul>
+<li>一个仓储托管了趣分期业务前后端所有代码，由于不断维护，这个仓储足足有<strong>600M</strong>；</li>
+<li>后端为了满足NativeAPP的接口需求，<strong>这个600M的仓储还包含了提供给客户端的代码</strong>；</li>
+<li>前后端开发流程为：<strong>先由后端写一个路由 → 前端将这个路由写成可以交互的页面 → 前端提交代码后后端同学“套模板”填充数据</strong>；</li>
+<li>前后端开发都在一台远程开发机上，通过samba隐射到本地进行开发；</li>
+<li>前端几乎没有做任何打包编译；有时候为了偷懒，甚至把CSS和JS直接以内嵌的方式写在模板里（不要去联想vue，两码事儿）</li>
+</ul>
+<p>写到这儿想贴代码来着，想想还是算了……</p>
+<h3 id="2、基于koa的实现"><a href="#2、基于koa的实现" class="headerlink" title="2、基于koa的实现"></a>2、基于koa的实现</h3><p>无论使用什么工具要实现前后端分离框架，无非要满足这样几点：</p>
+<ul>
+<li>更便捷地创建路由</li>
+<li>更高效地代理数据请求</li>
+<li>更灵活地环境部署</li>
+</ul>
+<p>先看一个已经实现了demo应用的目录结构：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#10;&#9492;&#9472;&#9472; demo&#10;    &#9500;&#9472;&#9472; controller&#10;    &#9474;   &#9500;&#9472;&#9472; data.js&#10;    &#9474;   &#9500;&#9472;&#9472; defaultCtrl.js&#10;    &#9474;   &#9492;&#9472;&#9472; home.js&#10;    &#9500;&#9472;&#9472; static&#10;    &#9474;   &#9500;&#9472;&#9472; css&#10;    &#9474;   &#9500;&#9472;&#9472; image&#10;    &#9474;   &#9492;&#9472;&#9472; js&#10;    &#9492;&#9472;&#9472; views&#10;        &#9492;&#9472;&#9472; home.html</span><br></pre></td></tr></table></figure></p>
+<p>这个结构大家再熟悉不过：<code>controller</code>提供路由；<code>static</code>包含静态文件；<code>views</code>提供模板文件。<br>这里可能大家会有疑问，如果我的前端构建是components的模式怎么办呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#9500;&#9472;&#9472;components_a&#10;&#9474;   &#9500;&#9472;&#9472; home.js&#10;&#9474;   &#9500;&#9472;&#9472; home.css&#10;&#9474;   &#9492;&#9472;&#9472; home.html&#10;&#9500;&#9472;&#9472;components_b&#10;...</span><br></pre></td></tr></table></figure></p>
+<p>没关系，do what u want！很多boilerplate可以直接拿到这个框架下直接使用，我们团队自己也正在使用了requirejs和vue的构建方案。</p>
+<h4 id="1）更便捷地创建路由：controller"><a href="#1）更便捷地创建路由：controller" class="headerlink" title="1）更便捷地创建路由：controller"></a>1）更便捷地创建路由：<code>controller</code></h4><p>回到上文提到的案例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">controller&#10;&#9500;&#9472;&#9472; data.js&#10;&#9492;&#9472;&#9472; home.js</span><br></pre></td></tr></table></figure>
+<p>这段代码生成的是一个<code>/data/*</code>,<code>/home/*</code>路由，用过Express的同学对这种路由实现肯定一点都不陌生。</p>
+<p>但有一点不一样的是，koa下面每一个路由是一个独立的generator函数（很遗憾，generator函数不能使用箭头函数的语法来表示），参看<code>controller/home.js</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exports.index = function* () &#123;&#10;  yield this.bindDefault();&#10;  yield this.render(&#39;home&#39;, &#123;&#10;    title: &#39;Hello , Grace!&#39;&#10;  &#125;);&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>你还可以用一个对象把一个controller包起来，，参看<code>controller/data.js</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exports.info = &#123;&#10;  repo: function*()&#123;&#10;    yield this.proxy(&#39;github:repos/xiongwilee/koa-grace&#39;)&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种写法非常适用于仅仅用来做一个数据代理的ajax请求的控制器。当然，如果需要的话，你还可以在控制器里对数据做一些加工。</p>
+<p>另外，还有几个细节与express的路由控制器不太一样：</p>
+<ol>
+<li>终止请求的动作都有koa来完成，在这里的controller里，你不需要通过<code>res.end()</code>来终止请求；</li>
+<li>这里的controller的作用域，就是koa的上下文，所以你可以通过<code>this.req</code>获取request对象；</li>
+<li>这里的controller里，异步回调的语法成为了往事，请尽情的使用<code>yield</code>。</li>
+</ol>
+<p>我们对现在的路由方式做了一个压测：8核CPU/8G内存的机器，通过一个路由返回<code>hello world!</code>，结果显示：<strong>8核CPU/8G至少能扛住1000QPS</strong>的压力（cpu idle不到60%，cpu load接近8）。</p>
+<h4 id="2）更高效地代理数据请求：proxy"><a href="#2）更高效地代理数据请求：proxy" class="headerlink" title="2）更高效地代理数据请求：proxy"></a>2）更高效地代理数据请求：proxy</h4><p>前后端分离模式下的，数据代理主要有这两种使命：</p>
+<ul>
+<li>一种是，拼装一个和多个数据结果，给模板渲染数据或者给Ajax接口</li>
+<li>另外一种是，接受用户的数据请求，将结果交给一个后端接口</li>
+</ul>
+<p>第一种场景，比如：一个用户中心的页面，需要展示用户的用户信息、订单列表、喜欢的商品推荐等等信息。由于后端的架构，用户、订单、商品可能都是属于不同的服务，这就意味着，后端同学需要给你同时拼装这么多数据，拼装还有可能是同步获取每个接口然后再一起返回给前端。</p>
+<p>现在，就可以尽情的发挥<strong>nodejs异步并发及koa的generator同步语法</strong>的优势，我们还可以这么写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo: function*()&#123;&#10;  yield this.proxy(&#123;&#10;   data1:&#39;github:repos/xiongwilee/data1&#39;,&#10;   data2:&#39;github:repos/xiongwilee/data2&#39;,&#10;   data3:&#39;github:repos/xiongwilee/data3&#39;&#10;  &#125;)&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>koa会<strong>自动并发请求所有接口</strong>，然后将结果返回给你，然后可以在上下文的<code>backData</code>中获取结果集。</p>
+<p>另外一种场景，比如用户需要上传一张图片或者提交一篇文章，你也可以这样写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">submit: function*()&#123;&#10;  yield this.proxy(&#39;http://test.com/submit&#39;)&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>不用做任何配置，koa会直接把request数据buffer直接通过管道pipe给后端接口。</p>
+<p>值得一提的是：</p>
+<ul>
+<li>有没有发现，这种proxy方式是没有同域机制的限制 了，前端面试常问的跨域方案都不是事儿；</li>
+<li>另外，同学们可能觉得，本来一个请求都能搞定的事情非要用nodejs代理一次，会不会很慢？事实上，我们的测试结果显示：<strong>内网访问的情况下，nodejs代理耗时不超过10ms</strong></li>
+</ul>
+<p>最后，我们也做了一个压测：8核CPU/8G内存的机器，通过一个路由将请求代理到另外一个接口，结果显示：<strong>8核CPU/8G至少能扛住300QPS</strong>的压力，这个结果比纯路由的压测情况要低很多，值得注意。</p>
+<p>不过有意思的一点是，我们压测发现：<strong>proxy的性能与接口响应时间无关，与接口响应content大小有密切关系：接口响应内容越大，proxy性能越差</strong>。</p>
+<h4 id="3）-更灵活地环境部署"><a href="#3）-更灵活地环境部署" class="headerlink" title="3） 更灵活地环境部署"></a>3） 更灵活地环境部署</h4><p>基于koa可以实现各类有意思的中间件。比如：可以拦截请求计算请求总耗时中间件、可以匹配路径实现本地的静态文件服务器、可以不需要再另开server实现一个mock数据的功能……</p>
+<h5 id="a-开发环境"><a href="#a-开发环境" class="headerlink" title="a) 开发环境"></a>a) 开发环境</h5><p>上文提到过一个DEMO的文件目录，具体在开发环境和生产环境中整体目录结构中其实是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#9500;&#9472;&#9472; app&#9;&#9;&#9;&#9;// &#24320;&#21457;&#27169;&#24335;&#19979;&#24212;&#29992;&#27169;&#22359;&#30446;&#24405;&#10;&#9474;   &#9500;&#9472;&#9472; blog&#10;&#9474;   &#9492;&#9472;&#9472; demo&#10;&#9500;&#9472;&#9472; cli&#9;&#9;&#9;&#9;// &#37197;&#22871;&#21629;&#20196;&#34892;&#24037;&#20855;&#10;&#9474;   &#9500;&#9472;&#9472; bin&#10;&#9474;   &#9500;&#9472;&#9472; lib&#10;&#9474;   &#9492;&#9472;&#9472; package.json&#10;&#9500;&#9472;&#9472; log&#9;&#9;&#9;&#9;// &#26085;&#24535;&#30446;&#24405;&#10;&#9492;&#9472;&#9472; server&#9;&#9;&#9;// &#26381;&#21153;&#22120;&#30446;&#24405;&#10;&#9;&#9500;&#9472;&#9472; app&#9;&#9;&#9;// &#23454;&#38469;&#26381;&#21153;&#31471;&#24341;&#29992;&#30340;&#27169;&#22359;&#30446;&#24405;&#10;&#9;&#9474;   &#9500;&#9472;&#9472; blog&#10;&#9;&#9474;   &#9492;&#9472;&#9472; demo&#10;    &#9500;&#9472;&#9472; bin&#10;    &#9500;&#9472;&#9472; config&#10;    &#9500;&#9472;&#9472; src&#10;    &#9492;&#9472;&#9472; package.json</span><br></pre></td></tr></table></figure></p>
+<p>在开发环境下，你可以将<code>./app</code>下的项目源文件直接编译到<code>./server/app</code>目录，这就意味着：<strong><code>./app/</code>目录下的各个项目，你自己想怎么玩就怎么玩</strong>。</p>
+<p>我们目前有基于gulp+requirejs的模块化方案和基于webpack+vue的前端构建方案，其中gulp+requirejs的方案已经开源：<a href="https://github.com/xiongwilee/gulp-requirejs-boilerplate" target="_blank" rel="external">https://github.com/xiongwilee/gulp-requirejs-boilerplate</a> 。</p>
+<p>基于上文提到的路由和数据代理的功能，现在我们的开发模式就可以优化为：<strong>前后端确定接口→前后端同时开发→联调提测上线</strong>。给开发带来的好处自不必说：</p>
+<ul>
+<li>后端接口完全解耦，前端利用异步并发，性能可以达到最优；</li>
+<li>WebAPP和NativeAPP可以通用一套接口，后端省了不少成本；</li>
+<li>前后端独立之后，前端构建的成本更低，灵活性更高；</li>
+<li>……</li>
+</ul>
+<h5 id="b-生产环境"><a href="#b-生产环境" class="headerlink" title="b) 生产环境"></a>b) 生产环境</h5><p>生产环境的部署与大多数服务部署类似：经过<code>SLB</code>之后到<code>nginx</code>进行反向代理，走到nodejs服务响应请求；可以在nginx层进行负载均衡和监控；如果需要用到缓存，可以在nginx和nodejs之间再加一层<code>Varnish</code>。</p>
+<p>这里必须要推荐下最牛哔的nodejs进程管理工具：<a href="https://github.com/Unitech/PM2/" target="_blank" rel="external">pm2</a>，完成了趣店生产环境下nodejs进程管理和nodejs日志切分。</p>
+<p>然后提一下，我们的沙盒环境和测试环境部署。</p>
+<p>沙盒只需要摘一台性能比较low的线上机器，提供给办公网络访问就行。因为数据代理的接口直接走的服务端对应环境的接口，整个沙盒环境和测试环境的搭建也非常愉快。</p>
+<p>另外，我们对线上业务做了一个压测：<strong>单台8核CPU/8G机器，能扛住500QPS左右的压力</strong>。</p>
+<p>最后，关于环境部署，再提两个场景：</p>
+<ul>
+<li><p>一个场景是，<strong>超越前后端分离框架的本职工作，实现团队文档系统</strong>。</p>
+<p>  因为前后端分离框架本身是不支持数据库和SESSION存储功能的，为了满足一些简单的数据库和文件上传需求，我们自己实现了两个中间件，一个能够利用mongoose很简单地与mongo打交道，一个利用<code>formidable</code>,<code>koa-send</code>模块轻易实现文件上传和下载；从而很快实现了团队博客和文档系统。</p>
+<p>  当然了，这个文档系统和团队博客仅限在内网系统中使用。</p>
+</li>
+<li><p>另外一场景是，<strong>后端环境使用Java MVC框架下的前后端独立开发</strong>。</p>
+<p>  我们团队与蚂蚁金服团队深度合作（事实上是作为TP，实现支付宝下的业务需求），必须使用蚂蚁金服的基于Java的sofalite MVC框架，而且坑爹的是：蚂蚁金服不能提供他们的前端构建框架！</p>
+<p>  这就意味着：我们团队的前端同学需要回到刀耕火种时代，跟后端同学用一个仓储自己搭建Java环境进行本地开发了。</p>
+<p>  但是，别忘了，我们现在有基于koa的前后端分离框架啊（知乎腔）！</p>
+<p>  事实上，前后端独立开发的唯一瓶颈就在与Java的<code>velocity</code>模板引擎；而我们的前后端分离框架的模板引擎是可配的。</p>
+<p>  所以，前后端定好了接口，然后前端就愉快地用上mock数据独立开发去了；<strong>最后，整个项目提前四天开发联调完成</strong>。</p>
+</li>
+</ul>
+<h2 id="四、koa-grace"><a href="#四、koa-grace" class="headerlink" title="四、koa-grace"></a>四、koa-grace</h2><p>主（guang）角（gao）终于要出场了！</p>
+<p><a href="[koa-grace](https://github.com/xiongwilee/koa-grace"><img src="https://github.com/xiongwilee/demo/blob/master/photo/koa-grace.png?raw=true" alt=""></a>)</p>
+<p>这套前后端分离框架——<strong><a href="https://github.com/xiongwilee/koa-grace" target="_blank" rel="external">koa-grace：基于koa的前后端分离框架</a></strong>已经开源。欢迎各路大神<code>star</code>/<code>fork</code>/<code>提ISSUE</code>，谢谢！！！</p>
+<ul>
+<li><strong>项目主页：</strong> <a href="https://github.com/xiongwilee/koa-grace" target="_blank" rel="external">https://github.com/xiongwilee/koa-grace</a> </li>
+<li><strong>示例页面：</strong> <a href="http://grace.wilee.me/" target="_blank" rel="external">http://grace.wilee.me/</a></li>
+<li><strong>详细文档：</strong> <a href="https://github.com/xiongwilee/koa-grace/wiki/%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3" target="_blank" rel="external">https://github.com/xiongwilee/koa-grace/wiki/%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3</a></li>
+</ul>
+<p>另外，配套命令行工具暂时仅限内网使用，后续会开源出来。最后，关于koa-garce还得啰嗦两点：</p>
+<p>1）koa-grace是基于<code>koa 1.x</code>版本</p>
+<p>目前koa-grace所有的中间件都是基于<code>koa 1.x</code>，而<code>koa 2.x</code>正式发布之后会立刻跟进。</p>
+<p>但koa-grace毕竟只是一个轻量级的框架：<code>Requiring babel to run your server is just not good developer experience.</code>（引自：<a href="https://github.com/koajs/koa/issues/533" target="_blank" rel="external">koa/issues/533</a>）。</p>
+<p>2）koa-grace需要完善测试用例</p>
+<p>vue的作者尤雨溪说过，<code>不写测试的开源项目不是合格的开源项目</code>。而koa-grace目前还没有测试用例覆盖，希望大家一起来完善。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>无论前端怎么玩、无论技术怎么发展，<strong>任何架构最终都是为了服务于产品</strong>。</p>
+<p><strong>减少技术成本，提升迭代效率和产品体验</strong>是Web技术的核心诉求（尤其是在做产品不快则死的创业公司）。</p>
+<p>趣店产品项目在逐渐升级，我们也在随着产品升级而将业务迁移到这套前后端分离架构上来；目前来看，koa-grace给趣店产品和技术部署带来了不少便利。</p>
+<p>就说到这儿，老板喊我去写PHP了…………</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2016/08/14/koa_grace_sfb/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
+        </div>
+        
+        
+          <div class="alignright"> 
+            <a href="http://wilee.me/2016/08/14/koa_grace_sfb/#comment" class="comment-link">
+              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2016/08/14/koa_grace_sfb/">&nbsp;
+              </span>
+            </a>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  <div class="post-content">
+    <header>
+      
+       
+
+  
+    <h1 class="title">
       <a href="/2016/03/03/koa-grace/" target="_blank"><i class="fa fa-file-powerpoint-o"></i> koa-grace</a>
     </h1>
   
@@ -540,67 +731,6 @@ $ pm2 start node ./bin/server.js
           <div class="alignright"> 
             <a href="http://wilee.me/2015/06/10/tsinghua_web_frontend_slider/#comment" class="comment-link">
               <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2015/06/10/tsinghua_web_frontend_slider/">&nbsp;
-              </span>
-            </a>
-          </div>
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  <div class="post-content">
-    <header>
-      
-       
-
-  
-    <h1 class="title">
-      <a href="/2015/06/08/slider-test/" target="_blank"><i class="fa fa-file-powerpoint-o"></i> 我所理解的登录</a>
-    </h1>
-  
-
-<div class="collection">
-  <time datetime="2015-06-08T15:32:22.000Z"><i class="fa fa-clock-o"></i><span> 2015-06-08 11:32</span></time>
-  
-  
-</div>
-<div class="clear"></div>
-      
-    </header>
-    
-      <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"><i class="fa fa-chevron-left"></i></div>
-    <div class="next"><i class="fa fa-chevron-right"></i></div>
-  </div>
-</div>
-    
-    <div class="entry">
-      
-        <p>我所理解的登录</p>
-      
-    </div>
-    <footer>
-      
-        <div class="alignleft">
-            <a href="/2015/06/08/slider-test/#more" class="more-link"><i class="fa fa-chevron-right"></i>更多</a>
-        </div>
-        
-        
-          <div class="alignright"> 
-            <a href="http://wilee.me/2015/06/08/slider-test/#comment" class="comment-link">
-              <i class="fa fa-comments"></i><span class="ds-thread-count" data-thread-key="/2015/06/08/slider-test/">&nbsp;
               </span>
             </a>
           </div>
